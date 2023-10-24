@@ -1,5 +1,6 @@
 import LeftSidebar from "@/components/shared/navbar/LeftSidebar";
 import Navbar from "@/components/shared/navbar/Navbar";
+import RightSidebar from "@/components/shared/navbar/RightSidebar";
 import React, { PropsWithChildren } from "react";
 
 const RootLayout = ({ children }: PropsWithChildren) => {
@@ -16,6 +17,7 @@ const RootLayout = ({ children }: PropsWithChildren) => {
         </section>
 
         {/* Right sidebar */}
+        <RightSidebar />
       </section>
     </main>
   );
