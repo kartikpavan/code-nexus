@@ -16,7 +16,7 @@ const MobileNav = () => {
       <Sheet>
         <SheetTrigger>
           {/* //! Add a hidden class later */}
-          <BiMenu size={24} className="cursor-pointer " />
+          <BiMenu size={24} className="cursor-pointer md:hidden" />
         </SheetTrigger>
         <SheetContent side="left">
           <Link href="/">

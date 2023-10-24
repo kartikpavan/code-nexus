@@ -3,6 +3,7 @@ import { SignedIn, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import MobileNav from "./MobileNav";
+import GlobalSearch from "../searchBar/GlobalSearch";
 
 const Navbar = () => {
   return (
@@ -18,7 +19,7 @@ const Navbar = () => {
         </div>
       </Link>
       {/* Global Search */}
-      <div></div>
+      <GlobalSearch />
       {/* Profile */}
       <div className="flex items-center justify-between gap-5">
         <SignedIn>
