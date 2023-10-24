@@ -16,7 +16,6 @@ const RootLayout = ({ children }: PropsWithChildren) => {
 
         {/* Right sidebar */}
       </section>
-      {children}
     </main>
   );
 };
