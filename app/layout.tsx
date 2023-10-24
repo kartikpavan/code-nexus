@@ -1,18 +1,17 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { Inter } from "next/font/google";
-
-import "@radix-ui/themes/styles.css";
-import "./theme-config.css";
-import { Theme, ThemePanel } from "@radix-ui/themes";
-
 import { ClerkProvider } from "@clerk/nextjs";
+import { Theme } from "@radix-ui/themes";
+import "@radix-ui/themes/styles.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import "./theme-config.css";
 
 const inter = Inter({
   subsets: ["latin"],
-  display: "swap",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-inter",
 });
+
 export const metadata: Metadata = {
   title: "Query Hive",
   description:
@@ -21,8 +20,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.className}>
-      <body>
+    <html lang="en">
+      <body className={`${inter.className}`}>
         <Theme accentColor="lime" scaling="105%">
           <ClerkProvider>
             <main>{children}</main>
