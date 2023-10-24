@@ -12,7 +12,7 @@ const RootLayout = ({ children }: PropsWithChildren) => {
         {/* Left Sidebar */}
         <LeftSidebar />
         {/* Main Section */}
-        <section className="flex bg-secondary min-h-screen flex-1 flex-col px-6 pb-6 pt-36 max-md:pb-14 sm:px-14">
+        <section className="flex bg-[#f5f5f5] min-h-screen flex-1 flex-col px-6 pb-6 pt-36 max-md:pb-14 sm:px-14">
           <div className="mx-auto w-full max-w-5xl">{children}</div>
         </section>
 
