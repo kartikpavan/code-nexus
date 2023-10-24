@@ -6,6 +6,8 @@ import "@radix-ui/themes/styles.css";
 import "./theme-config.css";
 import { Theme, ThemePanel } from "@radix-ui/themes";
 
+import { ClerkProvider } from "@clerk/nextjs";
+
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -22,7 +24,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={inter.className}>
       <body>
         <Theme accentColor="lime" scaling="105%">
-          <main>{children}</main>
+          <ClerkProvider>
+            <main>{children}</main>
+          </ClerkProvider>
         </Theme>
       </body>
     </html>
