@@ -20,8 +20,10 @@ const LeftSidebar = () => {
               key={item.label}
               href={`${item.route}`}
               className={`${
-                isActive ? "rounded-lg font-semibold bg-zinc-200 text-primary" : ""
-              } flex items-center gap-3 justify-start bg-transparent p-4 hover:bg-zinc-100/70 transition-colors duration-200 ease-in-out hover:rounded-lg cursor-pointer`}
+                isActive
+                  ? "rounded-lg font-semibold bg-blue-100 dark:bg-blue-900/30 text-primary "
+                  : ""
+              } flex items-center gap-3 justify-start bg-transparent p-4 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200 ease-in-out rounded-lg hover:rounded-lg cursor-pointer`}
             >
               <Image src={item.imgURL} alt={item.label} height={23} width={23} />
               <p className="max-lg:hidden">{item.label}</p>

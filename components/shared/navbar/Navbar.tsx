@@ -10,13 +10,10 @@ const Navbar = () => {
   return (
     <nav className="flex items-center justify-between fixed bg-white border dark:bg-[#020817] z-50 w-full gap-5 px-6 py-4 md:py-4 shadow-sm sm:px-12">
       <Link href="/">
-        {/* Mobile Logo */}
-        <div className="flex lg:hidden">
-          <Image src={"/images/logoImg.png"} alt="Query-Hive" width={30} height={30} />
-        </div>
-        {/* Desktop Logo */}
-        <div className="hidden lg:flex">
-          <Image src={"/images/LOGO.png"} alt="Query-Hive" width={150} height={150} />
+        <div className="text-2xl font-bold text-spaceGrotesk flex gap-2 items-center">
+          Code
+          <Image src={"/images/site-logo.svg"} alt="code-nexus" width={23} height={23} />
+          <span className="text-primary">Nexus</span>
         </div>
       </Link>
       {/* Global Search */}

@@ -14,6 +14,10 @@ const config: Config = {
         "2xl": "1400px",
       },
     },
+    fontFamily: {
+      inter: ["var(--font-inter)"],
+      spaceGrotesk: ["var(--font-spaceGrotesk)"],
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
