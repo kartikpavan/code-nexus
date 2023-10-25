@@ -7,7 +7,7 @@ import GlobalSearch from "../searchBar/GlobalSearch";
 
 const Navbar = () => {
   return (
-    <nav className="flex items-center bg-white justify-between fixed z-50 w-full gap-5 px-6 py-2 shadow-sm sm:px-12">
+    <nav className="flex items-center bg-white justify-between fixed z-50 w-full gap-5 px-6 py-6 shadow-sm sm:px-12">
       <Link href="/">
         {/* Mobile Logo */}
         <div className="flex lg:hidden">
