@@ -1,7 +1,9 @@
+import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/home/HomeFilter";
 import Filter from "@/components/shared/Filter";
 import LocalSearch from "@/components/shared/searchBar/LocalSearch";
 import { Button } from "@/components/ui/button";
+import { HomePageQuestions } from "@/constants";
 import { HomePageFilters } from "@/constants/filters";
 import Link from "next/link";
 
@@ -18,7 +20,7 @@ export default function Home() {
         </Link>
       </div>
       {/* Search and filter */}
-      <div className="flex mt-11 justify-between gap-5 max-sm:flex-col sm:items-center">
+      <div className="flex mt-8 justify-between gap-5 max-sm:flex-col sm:items-center">
         {/* Search */}
         <LocalSearch route="/" placeholder="Search Questions" otherClasses="flex-1" />
         {/* Filter-> till md screen size , filter is visible */}
@@ -29,6 +31,23 @@ export default function Home() {
         />
       </div>
       <HomeFilter />
+      <div className="mt-10 flex flex-col gap-6 w-full">
+        {HomePageQuestions.map((ques) => {
+          return (
+            <QuestionCard
+              key={ques._id}
+              _id={ques._id}
+              title={ques.title}
+              tags={ques.tags}
+              createdAt={ques.createdAt}
+              views={ques.views}
+              upvotes={ques.upvotes}
+              author={ques.author}
+              answers={ques.answers}
+            />
+          );
+        })}
+      </div>
     </>
   );
 }

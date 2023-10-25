@@ -6,7 +6,7 @@ import RenderTag from "../RenderTag";
 
 const RightSidebar = () => {
   return (
-    <div className="sticky right-0 top-0 flex h-screen flex-col overflow-y-auto p-6 border shadow-sm pt-36 max-sm:hidden w-[350px] max-xl:hidden">
+    <div className="sticky right-0 top-0 flex h-screen flex-col overflow-y-auto p-6 border shadow-sm pt-32 max-sm:hidden w-[350px] max-xl:hidden">
       {/* Top Questions Section */}
       <div>
         <h3 className="text-xl font-semibold">Top Questions</h3>

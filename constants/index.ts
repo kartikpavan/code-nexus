@@ -61,3 +61,42 @@ export const popularTags = [
   { _id: 3, name: "PHP", totalQuestions: 3 },
   { _id: 4, name: "JAVA", totalQuestions: 17 },
 ];
+
+export const HomePageQuestions = [
+  {
+    _id: 1,
+    title: "How to use conditional statements in TypeScript?",
+    tags: [
+      { _id: "tag3", name: "typescript" },
+      { _id: "tag4", name: "conditional-statements" },
+    ],
+    author: {
+      _id: "user4",
+      name: "Alice Johnson",
+      picture: "user4.jpg",
+    },
+    upvotes: 28,
+    views: 900,
+    answers: [],
+    createdAt: new Date("2023-10-21T10:15:00"),
+  },
+  {
+    _id: 2,
+    title: "How to sort an array in JavaScript?",
+    tags: [
+      { _id: "tag3", name: "typescript" },
+      { _id: "tag4", name: "conditional-statements" },
+      { _id: "tag6", name: "React" },
+      { _id: "tag5", name: "Javascript" },
+    ],
+    author: {
+      _id: "user4",
+      name: "Alice Johnson",
+      picture: "user4.jpg",
+    },
+    upvotes: 28,
+    views: 900,
+    answers: [],
+    createdAt: new Date("2023-10-23T10:15:00"),
+  },
+];
