@@ -4,10 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import MobileNav from "./MobileNav";
 import GlobalSearch from "../searchBar/GlobalSearch";
+import ThemeSwitch from "./ThemeSwitch";
 
 const Navbar = () => {
   return (
-    <nav className="flex items-center bg-white justify-between fixed z-50 w-full gap-5 px-6 py-6 md:py-2 shadow-sm sm:px-12">
+    <nav className="flex items-center justify-between fixed bg-white border dark:bg-[#020817] z-50 w-full gap-5 px-6 py-4 md:py-4 shadow-sm sm:px-12">
       <Link href="/">
         {/* Mobile Logo */}
         <div className="flex lg:hidden">
@@ -21,7 +22,9 @@ const Navbar = () => {
       {/* Global Search */}
       <GlobalSearch />
       {/* Profile */}
-      <div className="flex items-center justify-between gap-5">
+      <div className="flex items-center justify-between gap-3">
+        <ThemeSwitch />
+
         <SignedIn>
           <UserButton afterSignOutUrl="/" />
         </SignedIn>

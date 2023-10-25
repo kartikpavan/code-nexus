@@ -12,7 +12,7 @@ const RenderTag = ({ _id, name, totalQuestions }: Props) => {
     <Link href={`/tags/${_id}`} className="flex items-center justify-between">
       <Badge
         variant="secondary"
-        className="font-medium text-primary hover:bg-white hover:border hover:border-primary"
+        className="font-medium text-primary hover:border hover:border-primary"
       >
         {name}
       </Badge>

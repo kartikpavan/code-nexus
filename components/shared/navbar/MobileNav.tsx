@@ -1,6 +1,6 @@
 "use client";
 
-import { BiMenu } from "react-icons/bi";
+import { CgMenuRight } from "react-icons/cg";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 import Link from "next/link";
@@ -16,7 +16,7 @@ const MobileNav = () => {
       <Sheet>
         <SheetTrigger>
           {/* //! Add a hidden class later */}
-          <BiMenu size={24} className="cursor-pointer md:hidden" />
+          <CgMenuRight size={28} className="cursor-pointer md:hidden" />
         </SheetTrigger>
         <SheetContent side="left">
           <Link href="/">
