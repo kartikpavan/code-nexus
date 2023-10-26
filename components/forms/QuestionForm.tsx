@@ -16,7 +16,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { Badge } from "../ui/badge";
+import Image from "next/image";
+
+const btnType: string = "create";
 
 const QuestionForm = () => {
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
@@ -27,10 +31,62 @@ const QuestionForm = () => {
       tags: [],
     },
   });
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const editorRef = useRef(null);
 
+  // Add Tag
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, field: any) => {
+    if (e.key === "Enter" && field.name === "tags") {
+      e.preventDefault();
+      const inputTag = e.target as HTMLInputElement;
+      const tagValue = inputTag.value; // get the tag name
+
+      // check if tag field is not empty
+      if (tagValue !== "") {
+        // if tag is more than 15 chars throw err
+        if (tagValue.length > 15) {
+          return form.setError("tags", {
+            type: "required",
+            message: "Tag must be less than 15 characters",
+          });
+        }
+        if (tagValue.length < 3) {
+          return form.setError("tags", {
+            type: "required",
+            message: "Tag must be more than 2 characters",
+          });
+        }
+        // if tag is not repeated / included in tags[] || checking for duplicacy
+        if (!field.value.includes(tagValue as never)) {
+          // setting value
+          form.setValue("tags", [...field.value, tagValue]);
+          inputTag.value = "";
+          form.clearErrors("tags");
+        } else {
+          form.trigger();
+        }
+      }
+    }
+  };
+
+  // Remove Tag
+  const handleTagRemove = (currentTag: string, field: any) => {
+    const newTagList = field.value.filter((tag: string) => tag !== currentTag);
+
+    form.setValue("tags", newTagList);
+  };
+
   const submitHandler = (values: z.infer<typeof AskQuestionSchema>) => {
+    try {
+      setIsSubmitting(true);
+      // Api call to backend
+    } catch (error) {
+      setIsSubmitting(false);
+    } finally {
+      setIsSubmitting(false);
+    }
+
     console.log(values);
   };
 
@@ -121,7 +177,27 @@ const QuestionForm = () => {
                 Tags <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input {...field} />
+                <>
+                  <Input placeholder="Add Tags.." onKeyDown={(e) => handleInputKeyDown(e, field)} />
+                  {field.value.length > 0 ? (
+                    <div className="flex flex-start gap-3 pt-2 flex-wrap w-full">
+                      {field.value.map((tag: any) => {
+                        return (
+                          <Badge key={tag} variant="outline" className="cursor-pointer">
+                            {tag}
+                            <Image
+                              src="/icons/close.svg"
+                              alt="removetag"
+                              height={13}
+                              width={13}
+                              onClick={() => handleTagRemove(tag, field)}
+                            />
+                          </Badge>
+                        );
+                      })}
+                    </div>
+                  ) : null}
+                </>
               </FormControl>
               <FormDescription className="text-light italic text-primary/70 text-xs">
                 Add upto 3 tags to describe what your question is about. Press enter to add a tag.{" "}
@@ -130,7 +206,13 @@ const QuestionForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isSubmitting} className="max-w-[150px] w-full">
+          {isSubmitting ? (
+            <>{btnType === "edit" ? "Editing..." : "Posting..."}</>
+          ) : (
+            <>{btnType === "edit" ? "Edit Post" : "Submit Question"}</>
+          )}
+        </Button>
       </form>
     </Form>
   );
