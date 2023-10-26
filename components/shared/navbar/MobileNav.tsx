@@ -20,7 +20,11 @@ const MobileNav = () => {
         </SheetTrigger>
         <SheetContent side="left">
           <Link href="/">
-            <Image src={"/images/LOGO.png"} alt="Query-Hive" width={150} height={150} />
+            <div className="text-2xl font-bold text-spaceGrotesk flex gap-2 items-center">
+              Code
+              <Image src={"/images/site-logo.svg"} alt="code-nexus" width={23} height={23} />
+              <span className="text-primary">Nexus</span>
+            </div>
           </Link>
           <div className="flex flex-col h-[calc(100%-4rem)]">
             <SheetClose asChild>
