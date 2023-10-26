@@ -65,6 +65,23 @@ export const popularTags = [
 export const HomePageQuestions = [
   {
     _id: 1,
+    title: "How to import custom google fonts in NextJS 13? Link tags not working.",
+    tags: [
+      { _id: "tag3", name: "typescript" },
+      { _id: "tag4", name: "NextJs" },
+    ],
+    author: {
+      _id: "user23",
+      name: "Mikel Madson",
+      picture: "user4.jpg",
+    },
+    upvotes: 12,
+    views: 54,
+    answers: [],
+    createdAt: new Date("2023-10-22T10:15:00"),
+  },
+  {
+    _id: 2,
     title: "How to use conditional statements in TypeScript?",
     tags: [
       { _id: "tag3", name: "typescript" },
@@ -81,7 +98,7 @@ export const HomePageQuestions = [
     createdAt: new Date("2023-10-21T10:15:00"),
   },
   {
-    _id: 2,
+    _id: 3,
     title: "How to sort an array in JavaScript?",
     tags: [
       { _id: "tag3", name: "typescript" },
