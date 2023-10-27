@@ -1,9 +1,9 @@
 "use client";
 import { AskQuestionSchema } from "@/lib/validators";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Editor } from "@tinymce/tinymce-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Editor } from "@tinymce/tinymce-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,9 +16,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import Image from "next/image";
 import { useRef, useState } from "react";
 import { Badge } from "../ui/badge";
-import Image from "next/image";
+import { createQuestion } from "@/lib/actions/question.action";
 
 const btnType: string = "create";
 
@@ -77,10 +78,11 @@ const QuestionForm = () => {
     form.setValue("tags", newTagList);
   };
 
-  const submitHandler = (values: z.infer<typeof AskQuestionSchema>) => {
+  const submitHandler = async (values: z.infer<typeof AskQuestionSchema>) => {
     try {
       setIsSubmitting(true);
       // Api call to backend
+      await createQuestion(values);
     } catch (error) {
       setIsSubmitting(false);
     } finally {
@@ -129,6 +131,8 @@ const QuestionForm = () => {
                     // @ts-ignore
                     editorRef.current = editor;
                   }}
+                  onBlur={field.onBlur}
+                  onEditorChange={(content) => field.onChange(content)}
                   initialValue="Write something here"
                   init={{
                     height: 350,
