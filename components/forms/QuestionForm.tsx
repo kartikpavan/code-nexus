@@ -124,7 +124,6 @@ const QuestionForm = () => {
                 Detailed explaination of your problem <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                {/* //TODO :Add TINY MCE EDITOR LATER */}
                 <Editor
                   apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
                   onInit={(evt, editor) => {
