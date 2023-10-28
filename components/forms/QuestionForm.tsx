@@ -20,10 +20,14 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import { Badge } from "../ui/badge";
 import { createQuestion } from "@/lib/actions/question.action";
+import { usePathname, useRouter } from "next/navigation";
 
 const btnType: string = "create";
 
-const QuestionForm = () => {
+const QuestionForm = ({ currentUserID }: { currentUserID: string }) => {
+  const router = useRouter();
+  const currentPath = usePathname();
+
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
@@ -33,7 +37,6 @@ const QuestionForm = () => {
     },
   });
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
   const editorRef = useRef(null);
 
   // Add Tag
@@ -82,7 +85,14 @@ const QuestionForm = () => {
     try {
       setIsSubmitting(true);
       // Api call to backend
-      await createQuestion(values);
+
+      await createQuestion({
+        title: values.title,
+        content: values.explaination,
+        tags: values.tags,
+        author: JSON.parse(currentUserID),
+      });
+      router.push("/");
     } catch (error) {
       setIsSubmitting(false);
     } finally {

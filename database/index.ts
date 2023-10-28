@@ -10,7 +10,7 @@ export async function connectToDb() {
   if (isConnected) return console.log("MONGODB already connected");
   // Connect to MONGO DB
   try {
-    await mongoose.connect(process.env.MONGO_URI, { dbName: "kartik" });
+    await mongoose.connect(process.env.MONGO_URI, { dbName: "codeNexus" });
     isConnected = true;
     console.log("MONGO DB Connection successful");
   } catch (error) {
