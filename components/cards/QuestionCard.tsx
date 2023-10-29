@@ -1,16 +1,7 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import RenderTag from "../shared/RenderTag";
-import Image from "next/image";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDateTime } from "@/lib/utils";
-import Metric from "../shared/Metric";
 import Link from "next/link";
+import Metric from "../shared/Metric";
 
 interface Props {
   _id: number | string;
