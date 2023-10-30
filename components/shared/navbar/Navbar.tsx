@@ -8,7 +8,7 @@ import ThemeSwitch from "./ThemeSwitch";
 
 const Navbar = () => {
   return (
-    <nav className="flex items-center justify-between fixed bg-white border dark:bg-[#020817] z-50 w-full gap-5 px-6 py-4 md:py-4 shadow-sm sm:px-12">
+    <nav className="flex items-center justify-between fixed bg-white border dark:bg-[#020817] z-50 w-full gap-5 px-6 py-4 md:py-4 shadow-sm xl:px-10">
       <Link href="/">
         <div className=" font-bold font-mono flex gap-2 items-center mr-3">
           <h1 className="text-lg md:text-2xl">Code</h1>
