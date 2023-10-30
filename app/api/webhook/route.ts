@@ -6,7 +6,6 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
-  // TODO: Add secret
   const WEBHOOK_SECRET = process.env.NEXT_CLERK_WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
@@ -53,19 +52,19 @@ export async function POST(req: Request) {
   const { id } = evt.data;
   const eventType = evt.type;
   //! create user
-  if (evt.type === "user.created") {
+  if (eventType === "user.created") {
     const { id, email_addresses, image_url, username, first_name, last_name } = evt.data;
     // Create a new user in DB
     const mongoUser = await createUser({
       clerkId: id,
       name: `${first_name}${last_name}`,
       username: username!,
-      email_addresses: email_addresses[0].email_address,
+      email: email_addresses[0].email_address,
       picture: image_url,
     });
 
     return NextResponse.json({ message: "OK", user: mongoUser });
-  } else if (evt.type === "user.updated") {
+  } else if (eventType === "user.updated") {
     //! update User
     const { id, email_addresses, image_url, username, first_name, last_name } = evt.data;
     // Create a new user in DB
@@ -83,7 +82,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "OK", user: mongoUser });
   }
   //! Delete USER
-  if (evt.type === "user.deleted") {
+  if (eventType === "user.deleted") {
     const { id } = evt.data;
     const mongoUser = await deleteUser({ clerkId: id! });
 
