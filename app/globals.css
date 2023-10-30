@@ -49,14 +49,6 @@
   }
 } */
 
-.text-inter {
-  font-family: var(--font-inter);
-}
-
-.text-spaceGrotesk {
-  font-family: var(--font-spaceGrotesk);
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;

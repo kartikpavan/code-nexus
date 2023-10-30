@@ -15,8 +15,8 @@ const config: Config = {
       },
     },
     fontFamily: {
-      inter: ["var(--font-inter)"],
-      spaceGrotesk: ["var(--font-spaceGrotesk)"],
+      sans: ["var(--font-geist-sans)"],
+      mono: ["var(--font-geist-mono)"],
     },
     extend: {
       colors: {

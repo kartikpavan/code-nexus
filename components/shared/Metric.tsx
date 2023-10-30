@@ -14,9 +14,9 @@ const Metric = ({ imageUrl, alt, value, title, textStyles }: Props) => {
     <>
       <div className="flex items-center gap-1">
         <Image src={imageUrl} alt={alt} width={17} height={17} className="rounded-full" />
-        <p className="text-xs font-semibold text-gray-500">
+        <p className="text-xs text-gray-500">
           {value} {""}
-          <span className="font-medium">{title}</span>
+          <span>{title}</span>
         </p>
       </div>
     </>

@@ -19,6 +19,7 @@
     "@tinymce/tinymce-react": "^4.3.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "geist": "^1.0.0",
     "lucide-react": "^0.288.0",
     "mongoose": "^7.6.3",
     "next": "13.5.6",
