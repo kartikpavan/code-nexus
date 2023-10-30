@@ -85,7 +85,6 @@ const QuestionForm = ({ currentUserID }: { currentUserID: string }) => {
     try {
       setIsSubmitting(true);
       // Api call to backend
-
       await createQuestion({
         title: values.title,
         content: values.explaination,
@@ -219,6 +218,7 @@ const QuestionForm = ({ currentUserID }: { currentUserID: string }) => {
             </FormItem>
           )}
         />
+        {/* Making the btn dynamic for editing and posting new Question */}
         <Button type="submit" disabled={isSubmitting} className="max-w-[150px] w-full">
           {isSubmitting ? (
             <>{btnType === "edit" ? "Editing..." : "Posting..."}</>

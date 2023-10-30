@@ -7,7 +7,7 @@ export async function createQuestion(params: any) {
   try {
     connectToDb();
     const { title, author, content, tags, path } = params;
-    // Create a question
+    // Creating and saving question inside DB
     const question = await Question.create({
       title,
       content,
@@ -15,10 +15,11 @@ export async function createQuestion(params: any) {
     });
 
     const tagDocument = [];
-    // Create tag or fetch the tag if already exist in DB
+    // loop through incoming tags
     for (let tag of tags) {
+      // Check for existing tag and associate the question id to it
       const existingTag = await Tag.findOneAndUpdate(
-        { name: { $regex: new RegExp(`^${tag}$`, "i") } }, // this regex matches the tag name inside the DB
+        { name: { $regex: new RegExp(`^${tag}$`, "i") } }, // finding the tag with name
         { $setOnInsert: { name: tag }, $push: { question: question._id } }, // update to perform if the document is found or inserted
         { upsert: true, new: true } // if no doc is found then insert new doc with specified update and return the new document.
       );
