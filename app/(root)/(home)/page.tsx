@@ -5,9 +5,11 @@ import LocalSearch from "@/components/shared/searchBar/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { HomePageQuestions } from "@/constants";
 import { HomePageFilters } from "@/constants/filters";
+import { getQuestions } from "@/lib/actions/question.action";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const allQuestions = await getQuestions({});
   return (
     <>
       {/* Header */}
@@ -32,7 +34,7 @@ export default function Home() {
       </div>
       <HomeFilter />
       <div className="mt-10 flex flex-col gap-6 w-full">
-        {HomePageQuestions.map((ques) => {
+        {allQuestions?.questions.map((ques) => {
           return (
             <QuestionCard
               key={ques._id}
@@ -51,3 +53,5 @@ export default function Home() {
     </>
   );
 }
+
+export const dynamic = "force-dynamic";

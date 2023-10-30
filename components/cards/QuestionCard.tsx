@@ -43,9 +43,9 @@ const QuestionCard = ({ _id, title, tags, author, createdAt, views, answers, upv
       </CardHeader>
       <CardFooter className="w-full flex items-start justify-between flex-col-reverse sm:flex-row gap-4">
         <Metric
-          imageUrl="/icons/user.svg"
+          imageUrl={author?.picture}
           alt="user"
-          value={author.name}
+          value={author?.name}
           title={` - asked ${formatDateTime(createdAt)}`}
           textStyles="text-xs text-gray-500 "
         />

@@ -16,11 +16,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { createQuestion } from "@/lib/actions/question.action";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { Badge } from "../ui/badge";
-import { createQuestion } from "@/lib/actions/question.action";
-import { usePathname, useRouter } from "next/navigation";
 
 const btnType: string = "create";
 
@@ -90,6 +90,7 @@ const QuestionForm = ({ currentUserID }: { currentUserID: string }) => {
         content: values.explaination,
         tags: values.tags,
         author: JSON.parse(currentUserID),
+        path: currentPath,
       });
       router.push("/");
     } catch (error) {
