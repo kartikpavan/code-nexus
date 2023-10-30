@@ -4,7 +4,9 @@ import { connectToDb } from "@/database";
 import Question from "@/database/models/question.model";
 import User from "@/database/models/user.model";
 import { revalidatePath } from "next/cache";
+import { GetAllUsersParams } from "./shared.types";
 
+//! Get single User
 export async function getUser(userId: string | number) {
   try {
     connectToDb();
@@ -15,6 +17,7 @@ export async function getUser(userId: string | number) {
   }
 }
 
+//! Create User (Webhook)
 export async function createUser(userData: any) {
   try {
     connectToDb();
@@ -25,6 +28,7 @@ export async function createUser(userData: any) {
   }
 }
 
+//! Update User (Webhook)
 export async function updateUser(userData: any) {
   try {
     connectToDb();
@@ -36,6 +40,7 @@ export async function updateUser(userData: any) {
   }
 }
 
+//! Delete User (Webhook)
 export async function deleteUser(clerkId: any) {
   try {
     connectToDb();
@@ -48,6 +53,18 @@ export async function deleteUser(clerkId: any) {
     // TODO: delete answers , comments etc
     const deletedUser = await User.findByIdAndDelete(user._id);
     return deletedUser;
+  } catch (error) {
+    if (error instanceof Error) console.log(error.message);
+  }
+}
+
+//! Get all Users
+export async function getAllUsers(params: GetAllUsersParams) {
+  try {
+    connectToDb();
+    // const { page = 1, pageSize = 20, filter, searchQuery } = params;
+    const users = await User.find({}).sort({ createdAt: -1 });
+    return { users };
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
   }

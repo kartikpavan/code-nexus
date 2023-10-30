@@ -1,0 +1,34 @@
+import UserCard from "@/components/cards/UserCard";
+import Filter from "@/components/shared/Filter";
+import LocalSearch from "@/components/shared/searchBar/LocalSearch";
+import { UserFilters } from "@/constants/filters";
+import { getAllUsers } from "@/lib/actions/user.action";
+import React from "react";
+
+const CommunityPage = async () => {
+  const results = await getAllUsers({});
+  return (
+    <>
+      <h1 className="text-2xl font-semibold">All Users</h1>
+
+      {/* Search and filter */}
+      <div className="flex mt-8 justify-between gap-5 max-sm:flex-col sm:items-center">
+        {/* Search */}
+        <LocalSearch route="/" placeholder="Search for other users" otherClasses="flex-1" />
+        {/* Filter-> till md screen size , filter is visible */}
+        <Filter
+          filters={UserFilters}
+          otherClasses="min-w-[180px]"
+          containerClasses="hidden max-md:flex"
+        />
+      </div>
+      <div className="flex items-center flex-wrap gap-x-5 gap-y-10 mt-10">
+        {results?.users.map((user) => {
+          return <UserCard key={user._id} user={user} />;
+        })}
+      </div>
+    </>
+  );
+};
+
+export default CommunityPage;

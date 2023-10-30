@@ -6,6 +6,7 @@ import { CreateQuestionParams, GetQuestionsParams } from "./shared.types";
 import User from "@/database/models/user.model";
 import { revalidatePath } from "next/cache";
 
+//! Get Questions (Dynamic route)
 export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDb();
@@ -17,6 +18,7 @@ export async function getQuestions(params: GetQuestionsParams) {
   } catch (error) {}
 }
 
+//! Post a Question
 export async function createQuestion(params: CreateQuestionParams) {
   try {
     connectToDb();
