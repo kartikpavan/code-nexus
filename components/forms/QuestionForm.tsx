@@ -1,6 +1,4 @@
 "use client";
-//011627 -bg
-// d6deeb -> text
 import { AskQuestionSchema } from "@/lib/validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Editor } from "@tinymce/tinymce-react";
@@ -21,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { createQuestion } from "@/lib/actions/question.action";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Badge } from "../ui/badge";
 
 const btnType: string = "create";
@@ -34,15 +32,19 @@ const QuestionForm = ({ currentUserID }: { currentUserID: string }) => {
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
       title: "",
-      explaination: "",
+      explanation: "",
       tags: [],
     },
   });
+
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const editorRef = useRef(null);
 
   // Add Tag
-  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, field: any) => {
+  const handleInputKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    field: any
+  ) => {
     if (e.key === "Enter" && field.name === "tags") {
       e.preventDefault();
       const inputTag = e.target as HTMLInputElement;
@@ -89,14 +91,17 @@ const QuestionForm = ({ currentUserID }: { currentUserID: string }) => {
       // Api call to backend
       await createQuestion({
         title: values.title,
-        content: values.explaination,
+        content: values.explanation,
         tags: values.tags,
         author: JSON.parse(currentUserID),
         path: currentPath,
       });
       router.push("/");
     } catch (error) {
-      setIsSubmitting(false);
+      if (error instanceof Error) {
+        console.log(error.message);
+        setIsSubmitting(false);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -106,7 +111,10 @@ const QuestionForm = ({ currentUserID }: { currentUserID: string }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(submitHandler)} className="flex flex-col w-full space-y-6">
+      <form
+        onSubmit={form.handleSubmit(submitHandler)}
+        className="flex flex-col w-full space-y-6"
+      >
         {/* Title */}
         <FormField
           control={form.control}
@@ -120,7 +128,8 @@ const QuestionForm = ({ currentUserID }: { currentUserID: string }) => {
                 <Input {...field} />
               </FormControl>
               <FormDescription className="text-light italic text-primary/70 text-xs">
-                Be specific and imagine you are asking a question to another person
+                Be specific and imagine you are asking a question to another
+                person
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -129,11 +138,12 @@ const QuestionForm = ({ currentUserID }: { currentUserID: string }) => {
         {/* Explaination */}
         <FormField
           control={form.control}
-          name="explaination"
+          name="explanation"
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Detailed explaination of your problem <span className="text-red-500">*</span>
+                Detailed explaination of your problem{" "}
+                <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
                 <Editor
@@ -167,16 +177,17 @@ const QuestionForm = ({ currentUserID }: { currentUserID: string }) => {
                       "table",
                     ],
                     toolbar:
-                      "undo redo | " +
+                      "undo redo" +
                       "codesample bold italic forecolor | alignleft aligncenter " +
                       "alignright alignjustify | bullist numlist ",
-                    content_style: "body { font-family:Inter,Arial,sans-serif; font-size:16px }",
+                    content_style:
+                      "body { font-family:Inter,Arial,sans-serif; font-size:16px }",
                   }}
                 />
               </FormControl>
               <FormDescription className="text-light italic text-primary/70 text-xs">
-                Introduce your problem and expand on what you put in the title. Minimum 20
-                characters.{" "}
+                Introduce your problem and expand on what you put in the title.
+                Minimum 20 characters.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -193,12 +204,19 @@ const QuestionForm = ({ currentUserID }: { currentUserID: string }) => {
               </FormLabel>
               <FormControl>
                 <>
-                  <Input placeholder="Add Tags.." onKeyDown={(e) => handleInputKeyDown(e, field)} />
+                  <Input
+                    placeholder="Add Tags.."
+                    onKeyDown={(e) => handleInputKeyDown(e, field)}
+                  />
                   {field.value.length > 0 ? (
                     <div className="flex flex-start gap-3 pt-2 flex-wrap w-full">
                       {field.value.map((tag: any) => {
                         return (
-                          <Badge key={tag} variant="outline" className="cursor-pointer">
+                          <Badge
+                            key={tag}
+                            variant="outline"
+                            className="cursor-pointer"
+                          >
                             {tag}
                             <Image
                               src="/icons/close.svg"
@@ -215,14 +233,19 @@ const QuestionForm = ({ currentUserID }: { currentUserID: string }) => {
                 </>
               </FormControl>
               <FormDescription className="text-light italic text-primary/70 text-xs">
-                Add upto 3 tags to describe what your question is about. Press enter to add a tag.{" "}
+                Add upto 3 tags to describe what your question is about. Press
+                enter to add a tag.{" "}
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         {/* Making the btn dynamic for editing and posting new Question */}
-        <Button type="submit" disabled={isSubmitting} className="max-w-[150px] w-full">
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="max-w-[150px] w-full"
+        >
           {isSubmitting ? (
             <>{btnType === "edit" ? "Editing..." : "Posting..."}</>
           ) : (

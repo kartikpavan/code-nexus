@@ -1,12 +1,9 @@
-import UserCard from "@/components/cards/UserCard";
 import Filter from "@/components/shared/Filter";
 import LocalSearch from "@/components/shared/searchBar/LocalSearch";
 import { Badge } from "@/components/ui/badge";
 import { UserFilters } from "@/constants/filters";
 import { getAllTags } from "@/lib/actions/tags.action";
-import { getAllUsers } from "@/lib/actions/user.action";
 import Link from "next/link";
-import React from "react";
 
 const TagsPage = async () => {
   const results = await getAllTags({});
@@ -28,17 +25,6 @@ const TagsPage = async () => {
       <div className="flex items-center flex-wrap gap-x-5 gap-y-10 mt-10">
         {results?.tags.map((tag) => {
           return (
-            // <Link href={`/tags/${tag._id}`} key={tag._id}>
-            //   <div className="">
-            //     <div>
-            //       <p>{tag.name}</p>
-            //     </div>
-            //     <p>
-            //       <span>{tag.questions.length}+</span>
-            //     </p>{" "}
-            //     Questions
-            //   </div>
-            // </Link>
             <Link
               href={`/tags/${tag._id}`}
               key={tag._id}
