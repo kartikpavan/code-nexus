@@ -1,5 +1,6 @@
 import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
+import RenderTag from "@/components/shared/RenderTag";
 import { getQuestionById } from "@/lib/actions/question.action";
 import { formatDateTime } from "@/lib/utils";
 import Image from "next/image";
@@ -54,6 +55,11 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
       {/* Parse MARKDOWN */}
       <div>
         <ParseHTML data={question.content} />
+      </div>
+      <div className="flex flex-wrap gap-2 mt-5">
+        {question.tags.map((tag: any) => (
+          <RenderTag key={tag._id} _id={tag._id} name={tag.name} />
+        ))}
       </div>
     </>
   );

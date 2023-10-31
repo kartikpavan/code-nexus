@@ -1,9 +1,10 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import "./globals.css";
-import { ThemeProvider } from "@/context/ThemeProvider";
-
 import { GeistSans, GeistMono } from "geist/font";
+import "./globals.css";
+import "../styles/prism.css";
+
+import { ThemeProvider } from "@/context/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Code Nexus",
