@@ -25,7 +25,9 @@ const QuestionCard = ({ _id, title, tags, author, createdAt, views, answers, upv
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg sm:text-xl line-clamp-2">{title}</CardTitle>
+        <Link href={`/question/${_id}`}>
+          <CardTitle className="text-lg sm:text-xl line-clamp-2">{title}</CardTitle>
+        </Link>
         <CardDescription className="flex flex-wrap gap-3">
           {tags.map((tag) => {
             return (

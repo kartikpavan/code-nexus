@@ -2,7 +2,7 @@
 import { connectToDb } from "@/database";
 import Question from "@/database/models/question.model";
 import Tag from "@/database/models/tag.model";
-import { CreateQuestionParams, GetQuestionsParams } from "./shared.types";
+import { CreateQuestionParams, GetQuestionByIdParams, GetQuestionsParams } from "./shared.types";
 import User from "@/database/models/user.model";
 import { revalidatePath } from "next/cache";
 
@@ -45,6 +45,27 @@ export async function createQuestion(params: CreateQuestionParams) {
 
     await Question.findByIdAndUpdate(question._id, { $push: { tags: { $each: tagDocument } } });
     revalidatePath(path);
+  } catch (error) {
+    if (error instanceof Error) console.log(error.message);
+  }
+}
+
+//! Get Details of a question
+export async function getQuestionById(params: GetQuestionByIdParams) {
+  try {
+    connectToDb();
+    const question = await Question.findById(params.questionId)
+      .populate({
+        path: "tags",
+        model: Tag,
+        select: "_id name",
+      })
+      .populate({
+        path: "author",
+        model: User,
+        select: "_id name clerkId picture",
+      });
+    return question;
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
   }
