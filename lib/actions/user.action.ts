@@ -4,10 +4,15 @@ import { connectToDb } from "@/database";
 import Question from "@/database/models/question.model";
 import User from "@/database/models/user.model";
 import { revalidatePath } from "next/cache";
-import { GetAllUsersParams } from "./shared.types";
+import {
+  CreateUserParams,
+  DeleteUserParams,
+  GetAllUsersParams,
+  UpdateUserParams,
+} from "./shared.types";
 
-//! Get single User
-export async function getUser(userId: string | number) {
+//* Get single User
+export async function getUser(userId: string) {
   try {
     connectToDb();
     const user = await User.findOne({ clerkId: userId });
@@ -17,8 +22,8 @@ export async function getUser(userId: string | number) {
   }
 }
 
-//! Create User (Webhook)
-export async function createUser(userData: any) {
+//* Create User (Webhook)
+export async function createUser(userData: CreateUserParams) {
   try {
     connectToDb();
     const newUser = await User.create(userData);
@@ -28,8 +33,8 @@ export async function createUser(userData: any) {
   }
 }
 
-//! Update User (Webhook)
-export async function updateUser(userData: any) {
+//* Update User (Webhook)
+export async function updateUser(userData: UpdateUserParams) {
   try {
     connectToDb();
     const { clerkId, updateData, path } = userData;
@@ -40,17 +45,19 @@ export async function updateUser(userData: any) {
   }
 }
 
-//! Delete User (Webhook)
-export async function deleteUser(clerkId: any) {
+//* Delete User (Webhook)
+export async function deleteUser(clerkId: DeleteUserParams) {
   try {
     connectToDb();
     const user = await User.findOneAndDelete({ clerkId: clerkId });
     if (!user) throw new Error("User not found hence cannot delete");
-    // Get Qestion id's associated with the user
-    const questionIdAssociatedWithUser = await Question.find({ author: user._id }).distinct("_id");
     // Delete those questions posted by deleted user
     await Question.deleteMany({ author: user._id });
-    // TODO: delete answers , comments etc
+    // Get Qestion id's associated with the user
+    const questionId = await Question.find({ author: user._id }).distinct("_id");
+    // TODO: delete questions ,answers and comments etc
+
+    // Finally Delete the user
     const deletedUser = await User.findByIdAndDelete(user._id);
     return deletedUser;
   } catch (error) {
@@ -58,7 +65,7 @@ export async function deleteUser(clerkId: any) {
   }
 }
 
-//! Get all Users
+//* Get all Users
 export async function getAllUsers(params: GetAllUsersParams) {
   try {
     connectToDb();
