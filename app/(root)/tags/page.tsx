@@ -10,15 +10,10 @@ const TagsPage = async () => {
   return (
     <>
       <h1 className="text-2xl font-semibold">All Tags</h1>
-
       {/* Search and filter */}
       <div className="flex mt-8 justify-between gap-5 max-sm:flex-col sm:items-center">
         {/* Search */}
-        <LocalSearch
-          route="/"
-          placeholder="Search for other users"
-          otherClasses="flex-1"
-        />
+        <LocalSearch route="/" placeholder="Search for other users" otherClasses="flex-1" />
         {/* Filter-> till md screen size , filter is visible */}
         <Filter
           filters={UserFilters}
@@ -42,8 +37,7 @@ const TagsPage = async () => {
                   {tag.name.toUpperCase()}
                 </Badge>
                 <h1 className="mt-2 w-full text-spaceGrotesk text-sm text-gray-500 my-1 font-mono">
-                  <span className="text-primary">{tag.questions.length}</span>+
-                  Questions
+                  <span className="text-primary">{tag.questions.length}</span>+ Questions
                 </h1>
               </div>
             </Link>
