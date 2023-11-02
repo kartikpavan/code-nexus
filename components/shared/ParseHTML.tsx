@@ -34,7 +34,7 @@ const ParseHTML = ({ data }: { data: string }) => {
       Prism.highlightAll();
    }, []);
 
-   return <div className="overflow-x-scroll">{parse(data)}</div>;
+   return <div>{parse(data)}</div>;
 };
 
 export default ParseHTML;

@@ -3,15 +3,22 @@ import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
 import { getQuestionById } from "@/lib/actions/question.action";
+import { getUser } from "@/lib/actions/user.action";
 import { formatDateTime } from "@/lib/utils";
+import { auth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 
 const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
    const question = await getQuestionById({ questionId: params.id });
-
+   const { userId: clerkId } = auth();
+   let currentUser;
+   if (clerkId) {
+      currentUser = await getUser(clerkId);
+      console.log(currentUser);
+   }
    return (
-      <>
+      <div>
          <div className="flex items-start w-full flex-col">
             <div className="flex w-full flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
                <Link
@@ -58,7 +65,7 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
          </div>
          {/* Parse MARKDOWN */}
          {/* //! Solve CSS issue later for mobile  */}
-         {/* <ParseHTML data={question.content} /> */}
+         <ParseHTML data={question.content} />
 
          <div className="flex flex-wrap gap-2 mt-5">
             {question.tags.map((tag: any) => (
@@ -66,9 +73,13 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
             ))}
          </div>
          <div>
-            <AnswerForm />
+            <AnswerForm
+               question={question.content}
+               questionId={JSON.stringify(question._id)}
+               authorId={JSON.stringify(currentUser._id)}
+            />
          </div>
-      </>
+      </div>
    );
 };
 

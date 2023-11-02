@@ -1,14 +1,6 @@
 "use client";
 import React, { useRef, useState } from "react";
-import {
-   Form,
-   FormControl,
-   FormDescription,
-   FormField,
-   FormItem,
-   FormLabel,
-   FormMessage,
-} from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
 import { useForm } from "react-hook-form";
 import { AnswerSchema } from "@/lib/validators";
 import { z } from "zod";
@@ -17,8 +9,17 @@ import { Editor } from "@tinymce/tinymce-react";
 import { useTheme } from "next-themes";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import createAnswer from "@/lib/actions/answer.action";
+import { usePathname } from "next/navigation";
 
-const AnswerForm = () => {
+interface Props {
+   questionId: string;
+   authorId: string;
+   question: string;
+}
+
+const AnswerForm = ({ authorId, questionId, question }: Props) => {
+   const currentPath = usePathname();
    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
    const { theme } = useTheme();
    const editorRef = useRef(null);
@@ -29,7 +30,29 @@ const AnswerForm = () => {
       },
    });
 
-   const handleCreateAnswer = async (data: any) => {};
+   const handleCreateAnswer = async (values: z.infer<typeof AnswerSchema>) => {
+      try {
+         setIsSubmitting(true);
+         await createAnswer({
+            content: values.answer,
+            author: JSON.parse(authorId),
+            question: JSON.parse(questionId),
+            path: currentPath,
+         });
+         form.reset();
+         if (editorRef.current) {
+            const editor = editorRef.current as any;
+            editor.setContent("");
+         }
+      } catch (error) {
+         if (error instanceof Error) {
+            console.log(error.message);
+            setIsSubmitting(false);
+         }
+      } finally {
+         setIsSubmitting(false);
+      }
+   };
 
    return (
       <>
