@@ -1,4 +1,5 @@
 import AnswerForm from "@/components/forms/AnswerForm";
+import AllAnswers from "@/components/shared/AllAnswers";
 import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
@@ -10,13 +11,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
-   const question = await getQuestionById({ questionId: params.id });
    const { userId: clerkId } = auth();
    let currentUser;
    if (clerkId) {
       currentUser = await getUser(clerkId);
-      console.log(currentUser);
    }
+   const question = await getQuestionById({ questionId: params.id });
    return (
       <div>
          <div className="flex items-start w-full flex-col">
@@ -72,13 +72,18 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
                <RenderTag key={tag._id} _id={tag._id} name={tag.name} />
             ))}
          </div>
-         <div>
-            <AnswerForm
-               question={question.content}
-               questionId={JSON.stringify(question._id)}
-               authorId={JSON.stringify(currentUser._id)}
-            />
-         </div>
+
+         <AllAnswers
+            questionId={question._id}
+            authorId={JSON.stringify(currentUser._id)}
+            totalAnswers={question.answers.length}
+         />
+
+         <AnswerForm
+            question={question.content}
+            questionId={JSON.stringify(question._id)}
+            authorId={JSON.stringify(currentUser._id)}
+         />
       </div>
    );
 };

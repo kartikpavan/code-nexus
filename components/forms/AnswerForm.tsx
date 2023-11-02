@@ -9,8 +9,8 @@ import { Editor } from "@tinymce/tinymce-react";
 import { useTheme } from "next-themes";
 import { Button } from "../ui/button";
 import Image from "next/image";
-import createAnswer from "@/lib/actions/answer.action";
 import { usePathname } from "next/navigation";
+import { createAnswer } from "@/lib/actions/answer.action";
 
 interface Props {
    questionId: string;
