@@ -32,7 +32,7 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
                      height={22}
                      className="rounded-full"
                   />
-                  <p className="font-mono text-sm">{question.author.name}</p>
+                  <p className=" text-sm">{question.author.name}</p>
                </Link>
                {/* Voting */}
                <div className="flex justify-end">VOTING</div>
