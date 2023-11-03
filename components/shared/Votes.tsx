@@ -5,6 +5,8 @@ import { downvoteQuestion, upvoteQuestion } from "@/lib/actions/question.action"
 import { usePathname, useRouter } from "next/navigation";
 import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
 import { savePost } from "@/lib/actions/user.action";
+import { useEffect } from "react";
+import { viewFunction } from "@/lib/actions/interaction.action";
 
 interface Props {
    type: "question" | "answer";
@@ -89,6 +91,13 @@ const Votes = ({
          path: pathName,
       });
    };
+
+   useEffect(() => {
+      viewFunction({
+         questionId: JSON.parse(itemId),
+         userId: userId ? JSON.parse(userId) : undefined,
+      });
+   }, [itemId, userId, pathName, router]);
 
    return (
       <div className="flex gap-3">
