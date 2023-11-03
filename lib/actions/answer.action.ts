@@ -1,5 +1,4 @@
 "use server";
-
 import { connectToDb } from "@/database";
 import { CreateAnswerParams, GetAnswersParams } from "./shared.types";
 import Answer from "@/database/models/answer.model";

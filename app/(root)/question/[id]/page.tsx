@@ -3,6 +3,7 @@ import AllAnswers from "@/components/shared/AllAnswers";
 import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
+import Votes from "@/components/shared/Votes";
 import { getQuestionById } from "@/lib/actions/question.action";
 import { getUser } from "@/lib/actions/user.action";
 import { formatDateTime } from "@/lib/utils";
@@ -35,7 +36,16 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
                   <p className=" text-sm">{question.author.name}</p>
                </Link>
                {/* Voting */}
-               <div className="flex justify-end">VOTING</div>
+               <Votes
+                  type="question"
+                  itemId={JSON.stringify(question._id)}
+                  userId={JSON.stringify(currentUser._id)}
+                  upvotes={question.upvotes?.length}
+                  downvotes={question.downvotes?.length}
+                  hasUserUpvoted={question.upvotes?.includes(currentUser._id)}
+                  hasUserDownVoted={question.downvotes?.includes(currentUser._id)}
+                  hasSaved={currentUser?.savedPost?.includes(question._id)}
+               />
             </div>
             <h2 className="text-xl mt-3 w-full text-left">{question.title}</h2>
          </div>
