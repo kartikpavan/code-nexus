@@ -85,7 +85,7 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
 
          <AllAnswers
             questionId={question._id}
-            authorId={JSON.stringify(currentUser._id)}
+            authorId={currentUser._id}
             totalAnswers={question.answers.length}
          />
 

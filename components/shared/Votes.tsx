@@ -1,9 +1,12 @@
 "use client";
 import Image from "next/image";
 import { Badge } from "../ui/badge";
+import { downvoteQuestion, upvoteQuestion } from "@/lib/actions/question.action";
+import { usePathname, useRouter } from "next/navigation";
+import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
 
 interface Props {
-   type: string;
+   type: "question" | "answer";
    itemId: string;
    userId: string;
    upvotes: number;
@@ -23,7 +26,59 @@ const Votes = ({
    hasUserDownVoted,
    hasUserUpvoted,
 }: Props) => {
-   const handleVote = (type: string) => {};
+   const pathName = usePathname();
+   const router = useRouter();
+
+   const handleVote = async (action: "upvote" | "downvote") => {
+      // UPVOTE
+      if (action === "upvote") {
+         if (type === "question") {
+            // Server Action function
+            await upvoteQuestion({
+               questionId: JSON.parse(itemId),
+               userId: JSON.parse(userId),
+               hasupVoted: hasUserUpvoted,
+               hasdownVoted: hasUserDownVoted,
+               path: pathName,
+            });
+         } else if (type === "answer") {
+            // Server Action function
+            await upvoteAnswer({
+               answerId: JSON.parse(itemId),
+               userId: JSON.parse(userId),
+               hasupVoted: hasUserUpvoted,
+               hasdownVoted: hasUserDownVoted,
+               path: pathName,
+            });
+         }
+         // TODO : Toast Notification
+         return;
+      }
+      // DOWNVOTE
+      if (action === "downvote") {
+         if (type === "question") {
+            // Server Action function
+            await downvoteQuestion({
+               questionId: JSON.parse(itemId),
+               userId: JSON.parse(userId),
+               hasupVoted: hasUserUpvoted,
+               hasdownVoted: hasUserDownVoted,
+               path: pathName,
+            });
+         } else if (type === "answer") {
+            // Server Action function
+            await downvoteAnswer({
+               answerId: JSON.parse(itemId),
+               userId: JSON.parse(userId),
+               hasupVoted: hasUserUpvoted,
+               hasdownVoted: hasUserDownVoted,
+               path: pathName,
+            });
+         }
+         // TODO : Toast Notification
+         return;
+      }
+   };
 
    const handleSave = () => {};
 
@@ -61,15 +116,17 @@ const Votes = ({
                </Badge>
             </div>
          </div>
-         {/* Add to savedPost */}
-         <Image
-            src={hasSaved ? "/icons/star-filled.svg" : "/icons/star-outline.svg"}
-            alt="star"
-            width={17}
-            height={17}
-            className="cursor-pointer"
-            onClick={handleSave}
-         />
+         {/* SavedPost ICON*/}
+         {type === "question" && (
+            <Image
+               src={hasSaved ? "/icons/star-filled.svg" : "/icons/star-outline.svg"}
+               alt="star"
+               width={17}
+               height={17}
+               className="cursor-pointer"
+               onClick={handleSave}
+            />
+         )}
       </div>
    );
 };

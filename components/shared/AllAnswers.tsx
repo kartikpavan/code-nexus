@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { formatDateTime } from "@/lib/utils";
 import ParseHTML from "./ParseHTML";
+import Votes from "./Votes";
 interface Props {
    questionId: string;
    authorId: string;
@@ -18,7 +19,7 @@ const AllAnswers = async ({ questionId, authorId, totalAnswers, page, filter }: 
    return (
       <div className="my-6">
          <div className="flex items-center justify-between">
-            <h3>
+            <h3 className="text-sm">
                <span className="text-primary">{totalAnswers}</span> Answers
             </h3>
             <Filter filters={AnswerFilters} />
@@ -49,7 +50,17 @@ const AllAnswers = async ({ questionId, authorId, totalAnswers, page, filter }: 
                                  </p>
                               </div>
                            </Link>
-                           <div>VOTING</div>
+                           <div>
+                              <Votes
+                                 type="answer"
+                                 itemId={JSON.stringify(ans._id)}
+                                 userId={JSON.stringify(authorId)}
+                                 upvotes={ans.upvotes?.length}
+                                 downvotes={ans.downvotes?.length}
+                                 hasUserUpvoted={ans.upvotes?.includes(authorId)}
+                                 hasUserDownVoted={ans.downvotes?.includes(authorId)}
+                              />
+                           </div>
                         </div>
                      </div>
                      <ParseHTML data={ans.content} />
