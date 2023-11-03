@@ -7,9 +7,12 @@ import {
    CreateUserParams,
    DeleteUserParams,
    GetAllUsersParams,
+   GetSavedQuestionsParams,
    ToggleSaveQuestionParams,
    UpdateUserParams,
 } from "./shared.types";
+import Tag from "@/database/models/tag.model";
+import { FilterQuery } from "mongoose";
 
 //* Get single User
 export async function getUser(userId: string) {
@@ -96,6 +99,31 @@ export async function savePost(params: ToggleSaveQuestionParams) {
          );
       }
       revalidatePath(path);
+   } catch (error) {
+      if (error instanceof Error) console.log(error.message);
+   }
+}
+
+export async function getSavedPosts(params: GetSavedQuestionsParams) {
+   try {
+      connectToDb();
+      const { clerkId, page = 1, pageSize = 10, filter, searchQuery } = params;
+      const query: FilterQuery<typeof Question> = searchQuery
+         ? { title: { $regex: new RegExp(searchQuery, "i") } }
+         : {};
+      const user = await User.findOne({ clerkId }).populate({
+         path: "savedPost",
+         match: query,
+         options: { sort: { createdAt: -1 } },
+         populate: [
+            { path: "tags", model: Tag, select: "_id name" },
+            { path: "author", model: User, select: "_id name clerkId picture" },
+         ],
+      });
+      if (!user) throw new Error("User not Found");
+
+      const savedQuestions = await user.savedPost;
+      return { questions: savedQuestions };
    } catch (error) {
       if (error instanceof Error) console.log(error.message);
    }

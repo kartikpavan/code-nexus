@@ -17,7 +17,7 @@ interface Props {
 const AllAnswers = async ({ questionId, authorId, totalAnswers, page, filter }: Props) => {
    const result = await getAnswers({ questionId });
    return (
-      <div className="my-6">
+      <div className="my-6 ">
          <div className="flex items-center justify-between">
             <h3 className="text-sm">
                <span className="text-primary">{totalAnswers}</span> Answers

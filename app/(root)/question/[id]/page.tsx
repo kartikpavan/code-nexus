@@ -4,6 +4,7 @@ import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
 import Votes from "@/components/shared/Votes";
+import { Badge } from "@/components/ui/badge";
 import { getQuestionById } from "@/lib/actions/question.action";
 import { getUser } from "@/lib/actions/user.action";
 import { formatDateTime } from "@/lib/utils";
@@ -33,7 +34,9 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
                      height={22}
                      className="rounded-full"
                   />
-                  <p className=" text-sm">{question.author.name}</p>
+                  <Badge variant="secondary" className="text-sm font-normal rounded-md">
+                     {question.author.name}
+                  </Badge>
                </Link>
                {/* Voting */}
                <Votes
@@ -47,7 +50,7 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
                   hasSaved={currentUser?.savedPost?.includes(question._id)}
                />
             </div>
-            <h2 className="text-xl mt-3 w-full text-left">{question.title}</h2>
+            <h2 className="font-xl sm:text-2xl  mt-3 w-full text-left">{question.title}</h2>
          </div>
          {/* Metrics */}
          <div className="mb-8 mt-5 flex flex-wrap gap-4">
@@ -82,7 +85,9 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
                <RenderTag key={tag._id} _id={tag._id} name={tag.name} />
             ))}
          </div>
-
+         <div className="mt-5 mb-3">
+            <div className="border"></div>
+         </div>
          <AllAnswers
             questionId={question._id}
             authorId={currentUser._id}

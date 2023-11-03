@@ -175,7 +175,7 @@ const QuestionForm = ({ currentUserID }: { currentUserID: string }) => {
                                  "table",
                               ],
                               toolbar:
-                                 "undo redo" +
+                                 "undo redo | " +
                                  "codesample bold italic forecolor | alignleft aligncenter " +
                                  "alignright alignjustify | bullist numlist ",
                               content_style:
