@@ -8,11 +8,13 @@ import {
    DeleteUserParams,
    GetAllUsersParams,
    GetSavedQuestionsParams,
+   GetUserByIdParams,
    ToggleSaveQuestionParams,
    UpdateUserParams,
 } from "./shared.types";
 import Tag from "@/database/models/tag.model";
 import { FilterQuery } from "mongoose";
+import Answer from "@/database/models/answer.model";
 
 //* Get single User
 export async function getUser(userId: string) {
@@ -80,6 +82,7 @@ export async function getAllUsers(params: GetAllUsersParams) {
    }
 }
 
+//* Save a post to DB
 export async function savePost(params: ToggleSaveQuestionParams) {
    try {
       connectToDb();
@@ -104,6 +107,7 @@ export async function savePost(params: ToggleSaveQuestionParams) {
    }
 }
 
+//* Fetch saved Post to display
 export async function getSavedPosts(params: GetSavedQuestionsParams) {
    try {
       connectToDb();
@@ -124,6 +128,23 @@ export async function getSavedPosts(params: GetSavedQuestionsParams) {
 
       const savedQuestions = await user.savedPost;
       return { questions: savedQuestions };
+   } catch (error) {
+      if (error instanceof Error) console.log(error.message);
+   }
+}
+
+//* Fetch User information to display in profile page
+export async function getUserInformation(params: GetUserByIdParams) {
+   try {
+      connectToDb();
+      const user = await User.findOne({ clerkId: params.userId });
+      if (!user) throw new Error("User not found for getUserInformation method in server Action");
+      //  total Question posted my user
+      const totalQuestions = await Question.countDocuments({ author: user._id });
+      //  total Answers posted my user
+      const totalAnswers = await Answer.countDocuments({ author: user._id });
+
+      return { user, totalQuestions, totalAnswers };
    } catch (error) {
       if (error instanceof Error) console.log(error.message);
    }
