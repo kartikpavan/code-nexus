@@ -4,6 +4,7 @@ import { Badge } from "../ui/badge";
 import { downvoteQuestion, upvoteQuestion } from "@/lib/actions/question.action";
 import { usePathname, useRouter } from "next/navigation";
 import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
+import { savePost } from "@/lib/actions/user.action";
 
 interface Props {
    type: "question" | "answer";
@@ -80,7 +81,14 @@ const Votes = ({
       }
    };
 
-   const handleSave = () => {};
+   // Save Post
+   const handleSave = async () => {
+      await savePost({
+         userId: JSON.parse(userId),
+         questionId: JSON.parse(itemId),
+         path: pathName,
+      });
+   };
 
    return (
       <div className="flex gap-3">
