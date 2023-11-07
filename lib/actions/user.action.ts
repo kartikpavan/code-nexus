@@ -9,6 +9,7 @@ import {
    GetAllUsersParams,
    GetSavedQuestionsParams,
    GetUserByIdParams,
+   GetUserStatsParams,
    ToggleSaveQuestionParams,
    UpdateUserParams,
 } from "./shared.types";
@@ -145,6 +146,37 @@ export async function getUserInformation(params: GetUserByIdParams) {
       const totalAnswers = await Answer.countDocuments({ author: user._id });
 
       return { user, totalQuestions, totalAnswers };
+   } catch (error) {
+      if (error instanceof Error) console.log(error.message);
+   }
+}
+
+export async function getUserQuestions(params: GetUserStatsParams) {
+   try {
+      connectToDb();
+      const { userId, page = 1, pageSize = 10 } = params;
+      const totalQuestions = await Question.countDocuments({ author: userId });
+      const userQuestions = await Question.find({ author: userId })
+         .sort({ createdAt: -1 })
+         .populate("tags", "_id name")
+         .populate("author", "_id clerkId name picture");
+
+      return { totalQuestions, userQuestions };
+   } catch (error) {
+      if (error instanceof Error) console.log(error.message);
+   }
+}
+
+export async function GetUserAnswers(params: GetUserStatsParams) {
+   try {
+      connectToDb();
+      const { userId, page = 1, pageSize = 10 } = params;
+      const totalAnswers = await Answer.countDocuments({ author: userId });
+      const userAnswers = await Answer.find({ author: userId })
+         .sort({ createdAt: -1 })
+         .populate("author", "_id clerkId name picture");
+
+      return { totalAnswers, userAnswers };
    } catch (error) {
       if (error instanceof Error) console.log(error.message);
    }

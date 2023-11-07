@@ -19,9 +19,20 @@ interface Props {
    views: number;
    answers: Array<Object>;
    upvotes: number;
+   clerkId?: string | null;
 }
 
-const QuestionCard = ({ _id, title, tags, author, createdAt, views, answers, upvotes }: Props) => {
+const QuestionCard = ({
+   _id,
+   title,
+   tags,
+   author,
+   createdAt,
+   views,
+   answers,
+   upvotes,
+   clerkId,
+}: Props) => {
    return (
       <Card>
          <CardHeader>

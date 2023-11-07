@@ -1,4 +1,6 @@
+import AnswerTab from "@/components/shared/AnswerTab";
 import ProfileLink from "@/components/shared/ProfileLink";
+import QuestionTab from "@/components/shared/QuestionTab";
 import Stats from "@/components/shared/Stats";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,7 +10,13 @@ import { SignedIn, auth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 
-const UserProfileDetailPage = async ({ params }: { params: { id: string } }) => {
+const UserProfileDetailPage = async ({
+   params,
+   searchParams,
+}: {
+   params: { id: string };
+   searchParams: string;
+}) => {
    const { userId: clerkId } = auth();
    const userInfo = await getUserInformation({ userId: params.id });
    return (
@@ -70,13 +78,25 @@ const UserProfileDetailPage = async ({ params }: { params: { id: string } }) => 
          </div>
          {/* Top Posts or Top Answers */}
          <div className="mt-10 flex gap-10">
-            <Tabs defaultValue="top-posts" className="w-[400px]">
+            <Tabs defaultValue="top-posts" className="w-full">
                <TabsList>
                   <TabsTrigger value="top-posts">Top Posts</TabsTrigger>
                   <TabsTrigger value="answers">Answers</TabsTrigger>
                </TabsList>
-               <TabsContent value="top-posts">POSTS</TabsContent>
-               <TabsContent value="answers">ANSWERS</TabsContent>
+               <TabsContent value="top-posts">
+                  <QuestionTab
+                     searchParams={searchParams}
+                     userId={userInfo?.user._id}
+                     clerkId={clerkId}
+                  />
+               </TabsContent>
+               <TabsContent value="answers">
+                  <AnswerTab
+                     searchParams={searchParams}
+                     userId={userInfo?.user._id}
+                     clerkId={clerkId}
+                  />
+               </TabsContent>
             </Tabs>
          </div>
       </>
