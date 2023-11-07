@@ -93,11 +93,7 @@ export async function savePost(params: ToggleSaveQuestionParams) {
       const isQuestionSaved = user.savedPost.includes(questionId);
       // if question is already saved remove the question else insert the question
       if (isQuestionSaved) {
-         await User.findByIdAndUpdate(
-            userId,
-            { $pull: { savedPost: questionId } },
-            { new: true }
-         );
+         await User.findByIdAndUpdate(userId, { $pull: { savedPost: questionId } }, { new: true });
       } else {
          await User.findByIdAndUpdate(
             userId,
@@ -142,8 +138,7 @@ export async function getUserInformation(params: GetUserByIdParams) {
    try {
       connectToDb();
       const user = await User.findOne({ clerkId: params.userId });
-      if (!user)
-         throw new Error("User not found for getUserInformation method in server Action");
+      if (!user) throw new Error("User not found for getUserInformation method in server Action");
       //  total Question posted my user
       const totalQuestions = await Question.countDocuments({ author: user._id });
       //  total Answers posted my user
