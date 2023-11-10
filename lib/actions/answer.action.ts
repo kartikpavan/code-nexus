@@ -11,7 +11,9 @@ export async function createAnswer(params: CreateAnswerParams) {
     const { content, author, question, path } = params;
     const newAnswer = await Answer.create({ content, author, question });
     // Answer needs to added to a particular question answer array
-    await Question.findByIdAndUpdate(question, { $push: { answers: newAnswer._id } });
+    await Question.findByIdAndUpdate(question, {
+      $push: { answers: newAnswer._id },
+    });
     revalidatePath(path); // refreshes the question detail page
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
@@ -42,12 +44,17 @@ export async function upvoteAnswer(params: AnswerVoteParams) {
       updateQuery = { $pull: { upvotes: userId } };
     } else if (hasdownVoted) {
       // If we have already downvoted, remove from downvote array and push into upvote array
-      updateQuery = { $pull: { downvotes: userId }, $push: { upvotes: userId } };
+      updateQuery = {
+        $pull: { downvotes: userId },
+        $push: { upvotes: userId },
+      };
     } else {
       // If we havent upvoted or downvoted
       updateQuery = { $addToSet: { upvotes: userId } };
     }
-    const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, { new: true });
+    const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, {
+      new: true,
+    });
     if (!answer) throw new Error("Answer not found");
     // TODO: Author will get +10 Points for every upvotes he gets
     revalidatePath(path);
@@ -67,12 +74,17 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
       // if we have already downvoted then we need to remove that downvote on toggle
       updateQuery = { $pull: { downvotes: userId } };
     } else if (hasupVoted) {
-      updateQuery = { $pull: { upvotes: userId }, $push: { downvotes: userId } };
+      updateQuery = {
+        $pull: { upvotes: userId },
+        $push: { downvotes: userId },
+      };
     } else {
       // If we havent upvoted or downvoted
       updateQuery = { $addToSet: { downvotes: userId } };
     }
-    const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, { new: true });
+    const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, {
+      new: true,
+    });
     if (!answer) throw new Error("Answer not found");
 
     // TODO: Author will get +10 Points for every upvotes he gets
