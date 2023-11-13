@@ -26,10 +26,11 @@ const UserCard = ({ user }: Props) => {
           height={50}
           className="rounded-full object-cover"
         />
-
         <div>
           <h1 className="text-xs sm:text-sm font-semibold mt-2">{user.name}</h1>
-          <h1 className="w-full text-xs sm:text-sm text-gray-500 my-1">@{user.username}</h1>
+          <h1 className="w-full text-xs sm:text-sm text-gray-500 my-1">
+            @{user.username}
+          </h1>
         </div>
       </div>
     </Link>

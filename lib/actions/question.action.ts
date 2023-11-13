@@ -174,10 +174,9 @@ export async function editQuestion(params: EditQuestionParams) {
     const { questionId, path, content, title } = params;
     const question = await Question.findById(questionId).populate("tags");
     if (!question) throw new Error("Question not found to edit");
-
     question.title = title;
     question.content = content;
-
+    // We are not giving the power to update the tag as the logic will be very complicated
     await question.save();
     revalidatePath(path);
   } catch (error) {
