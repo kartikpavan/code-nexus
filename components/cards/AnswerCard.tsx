@@ -50,7 +50,7 @@ const AnswerCard = ({
           {/*  edit and delete btn  */}
           <SignedIn>
             {showActionButtons && (
-              <ActionBtn type="question" itemId={JSON.stringify(_id)} />
+              <ActionBtn type="answer" itemId={JSON.stringify(_id)} />
             )}
           </SignedIn>
         </CardHeader>
