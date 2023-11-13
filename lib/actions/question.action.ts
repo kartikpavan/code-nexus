@@ -4,12 +4,16 @@ import Question from "@/database/models/question.model";
 import Tag from "@/database/models/tag.model";
 import {
   CreateQuestionParams,
+  DeleteQuestionParams,
+  EditQuestionParams,
   GetQuestionByIdParams,
   GetQuestionsParams,
   QuestionVoteParams,
 } from "./shared.types";
 import User from "@/database/models/user.model";
 import { revalidatePath } from "next/cache";
+import Answer from "@/database/models/answer.model";
+import Interaction from "@/database/models/interaction.model";
 
 //! Get Questions (Dynamic route)
 export async function getQuestions(params: GetQuestionsParams) {
@@ -50,7 +54,9 @@ export async function createQuestion(params: CreateQuestionParams) {
       tagDocument.push(existingTag._id);
     }
 
-    await Question.findByIdAndUpdate(question._id, { $push: { tags: { $each: tagDocument } } });
+    await Question.findByIdAndUpdate(question._id, {
+      $push: { tags: { $each: tagDocument } },
+    });
     revalidatePath(path);
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
@@ -89,12 +95,17 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
       updateQuery = { $pull: { upvotes: userId } };
     } else if (hasdownVoted) {
       // If we have already downvoted, remove from downvote array and push into upvote array
-      updateQuery = { $pull: { downvotes: userId }, $push: { upvotes: userId } };
+      updateQuery = {
+        $pull: { downvotes: userId },
+        $push: { upvotes: userId },
+      };
     } else {
       // If we havent upvoted or downvoted
       updateQuery = { $addToSet: { upvotes: userId } };
     }
-    const question = await Question.findByIdAndUpdate(questionId, updateQuery, { new: true });
+    const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
+      new: true,
+    });
     if (!question) throw new Error("Question not found");
     // TODO: Author will get +10 Points for every upvotes he gets
     revalidatePath(path);
@@ -114,15 +125,60 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
       // if we have already downvoted then we need to remove that downvote on toggle
       updateQuery = { $pull: { downvotes: userId } };
     } else if (hasupVoted) {
-      updateQuery = { $pull: { upvotes: userId }, $push: { downvotes: userId } };
+      updateQuery = {
+        $pull: { upvotes: userId },
+        $push: { downvotes: userId },
+      };
     } else {
       // If we havent upvoted or downvoted
       updateQuery = { $addToSet: { downvotes: userId } };
     }
-    const question = await Question.findByIdAndUpdate(questionId, updateQuery, { new: true });
+    const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
+      new: true,
+    });
     if (!question) throw new Error("Question not found");
 
     // TODO: Author will get +10 Points for every upvotes he gets
+    revalidatePath(path);
+  } catch (error) {
+    if (error instanceof Error) console.log(error.message);
+  }
+}
+
+//! Delete question
+export async function deleteQuestion(params: DeleteQuestionParams) {
+  try {
+    connectToDb();
+    const { questionId, path } = params;
+    // Delete the question
+    await Question.deleteOne({ _id: questionId });
+    // Delete all answers associated with the question
+    await Answer.deleteMany({ question: questionId });
+    // Delete all Interactions like views, upvotes , likes etc
+    await Interaction.deleteMany({ question: questionId });
+    // Update tags to remove the refrence of the deleted question
+    await Tag.updateMany(
+      { questions: questionId },
+      { $pull: { questions: questionId } }
+    );
+    revalidatePath(path);
+  } catch (error) {
+    if (error instanceof Error) console.log(error.message);
+  }
+}
+
+//! Edit Question
+export async function editQuestion(params: EditQuestionParams) {
+  try {
+    connectToDb();
+    const { questionId, path, content, title } = params;
+    const question = await Question.findById(questionId).populate("tags");
+    if (!question) throw new Error("Question not found to edit");
+
+    question.title = title;
+    question.content = content;
+
+    await question.save();
     revalidatePath(path);
   } catch (error) {
     if (error instanceof Error) console.log(error.message);

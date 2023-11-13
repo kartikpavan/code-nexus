@@ -1,7 +1,15 @@
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { formatDateTime } from "@/lib/utils";
 import Link from "next/link";
 import Metric from "../shared/Metric";
+import { SignedIn } from "@clerk/nextjs";
+import ActionBtn from "../shared/ActionBtn";
 
 interface Props {
   _id: number | string;
@@ -33,11 +41,14 @@ const QuestionCard = ({
   upvotes,
   clerkId,
 }: Props) => {
+  const showActionButtons = clerkId && clerkId === author.clerkId;
   return (
     <Card>
       <CardHeader>
         <Link href={`/question/${_id}`}>
-          <CardTitle className="text-lg sm:text-xl line-clamp-2">{title}</CardTitle>
+          <CardTitle className="text-lg sm:text-xl line-clamp-2">
+            {title}
+          </CardTitle>
         </Link>
         <CardDescription className="flex flex-wrap gap-3">
           {tags.map((tag) => {
@@ -52,7 +63,12 @@ const QuestionCard = ({
             );
           })}
         </CardDescription>
-        {/* Add edit and delete btn later */}
+        {/*  edit and delete btn  */}
+        <SignedIn>
+          {showActionButtons && (
+            <ActionBtn type="question" itemId={JSON.stringify(_id)} />
+          )}
+        </SignedIn>
       </CardHeader>
       <CardFooter className="w-full flex items-start justify-between flex-col-reverse sm:flex-row gap-4">
         <Metric

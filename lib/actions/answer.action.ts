@@ -1,9 +1,15 @@
 "use server";
 import { connectToDb } from "@/database";
-import { AnswerVoteParams, CreateAnswerParams, GetAnswersParams } from "./shared.types";
+import {
+  AnswerVoteParams,
+  CreateAnswerParams,
+  DeleteAnswerParams,
+  GetAnswersParams,
+} from "./shared.types";
 import Answer from "@/database/models/answer.model";
 import Question from "@/database/models/question.model";
 import { revalidatePath } from "next/cache";
+import Interaction from "@/database/models/interaction.model";
 
 export async function createAnswer(params: CreateAnswerParams) {
   try {
@@ -88,6 +94,27 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
     if (!answer) throw new Error("Answer not found");
 
     // TODO: Author will get +10 Points for every upvotes he gets
+    revalidatePath(path);
+  } catch (error) {
+    if (error instanceof Error) console.log(error.message);
+  }
+}
+
+//! Delete Answer
+export async function deleteAnswer(params: DeleteAnswerParams) {
+  try {
+    connectToDb();
+    const { answerId, path } = params;
+    // Delete the answer
+    const answer = await Answer.findById(answerId);
+    if (!answer) throw new Error("answer Not found to delete");
+    await Answer.deleteOne({ _id: answerId });
+    // Delete all Interactions like views, upvotes , likes etc
+    await Interaction.deleteMany({ answer: answerId });
+    await Question.updateMany(
+      { _id: answer.question },
+      { $pull: { answers: answerId } }
+    );
     revalidatePath(path);
   } catch (error) {
     if (error instanceof Error) console.log(error.message);

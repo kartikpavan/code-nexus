@@ -1,7 +1,15 @@
 import Link from "next/link";
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import Metric from "../shared/Metric";
 import { formatDateTime } from "@/lib/utils";
+import { SignedIn } from "@clerk/nextjs";
+import ActionBtn from "../shared/ActionBtn";
 
 interface Props {
   clerkId: string | null;
@@ -20,16 +28,31 @@ interface Props {
   createdAt: Date;
 }
 
-const AnswerCard = ({ question, clerkId, _id, author, upvotes, createdAt }: Props) => {
+const AnswerCard = ({
+  question,
+  clerkId,
+  _id,
+  author,
+  upvotes,
+  createdAt,
+}: Props) => {
+  const showActionButtons = clerkId && clerkId === author.clerkId;
+
   return (
     <>
       <Card>
         <CardHeader>
           <Link href={`/question/${question?._id}/#${_id}`}>
-            <CardTitle className="text-lg sm:text-xl line-clamp-2">{question?.title}</CardTitle>
+            <CardTitle className="text-lg sm:text-xl line-clamp-2">
+              {question?.title}
+            </CardTitle>
           </Link>
-
-          {/* Add edit and delete btn later */}
+          {/*  edit and delete btn  */}
+          <SignedIn>
+            {showActionButtons && (
+              <ActionBtn type="question" itemId={JSON.stringify(_id)} />
+            )}
+          </SignedIn>
         </CardHeader>
         <CardFooter className="w-full flex items-start justify-between flex-col-reverse sm:flex-row gap-4">
           <Metric

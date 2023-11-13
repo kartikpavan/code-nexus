@@ -9,9 +9,13 @@ const AskQuestionPage = async () => {
   if (!userId) redirect("/sign-in");
   const currentUser = await getUser(userId);
   return (
-    <div>
-      <QuestionForm currentUserID={JSON.stringify(currentUser?._id)} />
-    </div>
+    <>
+      <h1 className="text-2xl font-semibold mb-5">Ask Question</h1>
+      <QuestionForm
+        type="create"
+        currentUserID={JSON.stringify(currentUser?._id)}
+      />
+    </>
   );
 };
 
