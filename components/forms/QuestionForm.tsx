@@ -55,10 +55,7 @@ const QuestionForm = ({ currentUserID, type, questionDetails }: Props) => {
   const editorRef = useRef(null);
 
   // Add Tag
-  const handleInputKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    field: any
-  ) => {
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, field: any) => {
     if (e.key === "Enter" && field.name === "tags") {
       e.preventDefault();
       const inputTag = e.target as HTMLInputElement;
@@ -135,10 +132,7 @@ const QuestionForm = ({ currentUserID, type, questionDetails }: Props) => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(submitHandler)}
-        className="flex flex-col w-full space-y-6"
-      >
+      <form onSubmit={form.handleSubmit(submitHandler)} className="flex flex-col w-full space-y-6">
         {/* Title */}
         <FormField
           control={form.control}
@@ -152,8 +146,7 @@ const QuestionForm = ({ currentUserID, type, questionDetails }: Props) => {
                 <Input {...field} />
               </FormControl>
               <FormDescription className="text-light italic text-primary/70 text-xs">
-                Be specific and imagine you are asking a question to another
-                person
+                Be specific and imagine you are asking a question to another person
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -166,8 +159,7 @@ const QuestionForm = ({ currentUserID, type, questionDetails }: Props) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Detailed explaination of your problem{" "}
-                <span className="text-red-500">*</span>
+                Detailed explaination of your problem <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
                 <Editor
@@ -204,16 +196,15 @@ const QuestionForm = ({ currentUserID, type, questionDetails }: Props) => {
                       "undo redo | " +
                       "codesample bold italic forecolor | alignleft aligncenter " +
                       "alignright alignjustify | bullist numlist ",
-                    content_style:
-                      "body { font-family:Inter,Arial,sans-serif; font-size:16px }",
+                    content_style: "body { font-family:Inter,Arial,sans-serif; font-size:16px }",
                     skin: theme === "dark" ? "oxide-dark" : "oxide",
                     content_css: theme === "dark" ? "dark" : "light",
                   }}
                 />
               </FormControl>
               <FormDescription className="text-light italic text-primary/70 text-xs">
-                Introduce your problem and expand on what you put in the title.
-                Minimum 20 characters.
+                Introduce your problem and expand on what you put in the title. Minimum 20
+                characters.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -241,9 +232,7 @@ const QuestionForm = ({ currentUserID, type, questionDetails }: Props) => {
                         return (
                           <Badge
                             key={tag}
-                            variant={
-                              type === "create" ? "default" : "secondary"
-                            }
+                            variant={type === "create" ? "default" : "secondary"}
                             className="cursor-pointer"
                           >
                             {tag}
@@ -264,19 +253,14 @@ const QuestionForm = ({ currentUserID, type, questionDetails }: Props) => {
                 </>
               </FormControl>
               <FormDescription className="text-light italic text-primary/70 text-xs">
-                Add upto 3 tags to describe what your question is about. Press
-                enter to add a tag.{" "}
+                Add upto 3 tags to describe what your question is about. Press enter to add a tag.{" "}
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         {/* Making the btn dynamic for editing and posting new Question */}
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          className="max-w-[150px] w-full"
-        >
+        <Button type="submit" disabled={isSubmitting} className="max-w-[150px] w-full">
           {isSubmitting ? (
             <>{type === "edit" ? "Editing..." : "Posting..."}</>
           ) : (

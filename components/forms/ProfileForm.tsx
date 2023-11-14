@@ -25,6 +25,7 @@ const ProfileForm = ({ clerkId, user }: { clerkId: string; user: string }) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const parsedUser = JSON.parse(user);
+
   const form = useForm<z.infer<typeof EditProfileSchema>>({
     resolver: zodResolver(EditProfileSchema),
     defaultValues: {
@@ -94,9 +95,7 @@ const ProfileForm = ({ clerkId, user }: { clerkId: string; user: string }) => {
                 <FormControl>
                   <Input placeholder="Username" {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
+                <FormDescription>This is your public display name.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -140,10 +139,7 @@ const ProfileForm = ({ clerkId, user }: { clerkId: string; user: string }) => {
                   Bio <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder="What's Special about you ?"
-                    {...field}
-                  />
+                  <Textarea placeholder="What's Special about you ?" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

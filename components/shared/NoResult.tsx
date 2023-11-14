@@ -1,19 +1,19 @@
 import Image from "next/image";
 import React from "react";
+import { Badge } from "../ui/badge";
 
 const NoResult = () => {
   return (
     <div className="w-full h-full flex items-center justify-center flex-col gap-5">
       <Image
-        src={"/icons/no-result.svg"}
+        src={"/images/no-result.png"}
         alt="no-result"
-        width={50}
-        height={50}
-        className="object-contain rounded-full"
+        width={400}
+        height={400}
       />
-      <h1 className="text-xl font-semibold italic text-primary">
-        No Result Found
-      </h1>
+      <Badge variant="secondary" className="text-lg">
+        No Results found
+      </Badge>
     </div>
   );
 };

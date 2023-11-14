@@ -33,7 +33,12 @@ const LeftSidebar = () => {
                   : ""
               } flex items-center gap-3 justify-start bg-transparent p-3 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200 ease-in-out rounded-lg hover:rounded-lg cursor-pointer`}
             >
-              <Image src={item.imgURL} alt={item.label} height={23} width={23} />
+              <Image
+                src={item.imgURL}
+                alt={item.label}
+                height={23}
+                width={23}
+              />
               <p className="max-lg:hidden">{item.label}</p>
             </Link>
           );
