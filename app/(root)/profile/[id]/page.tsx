@@ -63,7 +63,7 @@ const UserProfileDetailPage = async ({
           <SignedIn>
             {clerkId === userInfo?.user.clerkId && (
               <Link href="/profile/edit">
-                <Button variant="secondary">Edit Profile</Button>
+                <Button variant="outline">Edit Profile</Button>
               </Link>
             )}
           </SignedIn>

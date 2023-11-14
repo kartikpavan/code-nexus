@@ -60,7 +60,9 @@ export async function deleteUser(clerkId: DeleteUserParams) {
     // Delete those questions posted by deleted user
     await Question.deleteMany({ author: user._id });
     // Get Qestion id's associated with the user
-    const questionId = await Question.find({ author: user._id }).distinct("_id");
+    const questionId = await Question.find({ author: user._id }).distinct(
+      "_id"
+    );
     // TODO: delete questions ,answers and comments etc
 
     // Finally Delete the user
@@ -94,9 +96,17 @@ export async function savePost(params: ToggleSaveQuestionParams) {
     const isQuestionSaved = user.savedPost.includes(questionId);
     // if question is already saved remove the question else insert the question
     if (isQuestionSaved) {
-      await User.findByIdAndUpdate(userId, { $pull: { savedPost: questionId } }, { new: true });
+      await User.findByIdAndUpdate(
+        userId,
+        { $pull: { savedPost: questionId } },
+        { new: true }
+      );
     } else {
-      await User.findByIdAndUpdate(userId, { $addToSet: { savedPost: questionId } }, { new: true });
+      await User.findByIdAndUpdate(
+        userId,
+        { $addToSet: { savedPost: questionId } },
+        { new: true }
+      );
     }
     revalidatePath(path);
   } catch (error) {
