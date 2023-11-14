@@ -183,3 +183,15 @@ export async function editQuestion(params: EditQuestionParams) {
     if (error instanceof Error) console.log(error.message);
   }
 }
+
+export async function getTopQuestions() {
+  try {
+    connectToDb();
+    const questions = await Question.find({})
+      .sort({ views: -1, upvotes: -1 })
+      .limit(5);
+    return questions;
+  } catch (error) {
+    if (error instanceof Error) console.log(error.message);
+  }
+}

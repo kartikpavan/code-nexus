@@ -1,25 +1,32 @@
-import { popularTags, topQuestions } from "@/constants";
+import { popularTags } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import RenderTag from "../RenderTag";
+import { getTopQuestions } from "@/lib/actions/question.action";
 
-const RightSidebar = () => {
+const RightSidebar = async () => {
+  const topQuestions = await getTopQuestions();
   return (
     <div className="sticky right-0 top-0 flex h-screen flex-col overflow-y-auto p-6 border shadow-sm pt-32 max-sm:hidden w-[350px] max-xl:hidden">
       {/* Top Questions Section */}
       <div>
         <h3 className="text-xl font-semibold">Top Questions</h3>
         <div className="mt-5 flex flex-col gap-[30px]">
-          {topQuestions.map((ques) => {
+          {topQuestions?.map((ques) => {
             return (
               <Link
-                href={`/questions/${ques._id}`}
+                href={`/question/${ques._id}`}
                 key={ques._id}
-                className="flex items-center justify-between cursor-pointer gap-8"
+                className="flex hover:text-blue-600 items-center justify-between cursor-pointer gap-8"
               >
-                <p className="text-sm hover:underline">{ques.question}</p>
-                <Image src="/icons/rightarrow.svg" alt="arrow" height={17} width={17} />
+                <p className="text-sm hover:underline">{ques.title}</p>
+                <Image
+                  src="/icons/rightarrow.svg"
+                  alt="arrow"
+                  height={17}
+                  width={17}
+                />
               </Link>
             );
           })}
