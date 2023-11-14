@@ -42,20 +42,19 @@ export async function createQuestion(params: CreateQuestionParams) {
       author,
     });
 
-    const tagDocument = [];
-    // loop through incoming tags
-    for (let tag of tags) {
-      // Check for existing tag and associate the question id to it
+    // Create the tag or get them if they already exists
+    const tagDocuments = [];
+    for (const tag of tags) {
       const existingTag = await Tag.findOneAndUpdate(
-        { name: { $regex: new RegExp(`^${tag}$`, "i") } }, // finding the tag with name
-        { $setOnInsert: { name: tag }, $push: { question: question._id } }, // update to perform if the document is found or inserted
+        { name: { $regex: new RegExp(`^${tag}$`, "i") } },
+        { $setOnInsert: { name: tag }, $push: { questions: question._id } }, // update to perform if the document is found or inserted
         { upsert: true, new: true } // if no doc is found then insert new doc with specified update and return the new document.
       );
-      tagDocument.push(existingTag._id);
+      tagDocuments.push(existingTag._id);
     }
 
     await Question.findByIdAndUpdate(question._id, {
-      $push: { tags: { $each: tagDocument } },
+      $push: { tags: { $each: tagDocuments } },
     });
     revalidatePath(path);
   } catch (error) {

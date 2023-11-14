@@ -1,29 +1,33 @@
 import QuestionCard from "@/components/cards/QuestionCard";
-import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
 import LocalSearch from "@/components/shared/searchBar/LocalSearch";
-import { QuestionFilters } from "@/constants/filters";
-import { getSavedPosts } from "@/lib/actions/user.action";
-import { auth } from "@clerk/nextjs";
+import { Badge } from "@/components/ui/badge";
+import { getQuestionsByTagId } from "@/lib/actions/tags.action";
+import React from "react";
 
-export default async function CollectionPage() {
-  const { userId } = auth();
-  if (!userId) return null;
-  const result = await getSavedPosts({ clerkId: userId });
+const TagDetailPage = async ({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams: { q: string };
+}) => {
+  const result = await getQuestionsByTagId({
+    tagId: params.id,
+    page: 1,
+    searchQuery: searchParams.q,
+  });
   return (
     <>
-      {/* Header */}
-      <h1 className="text-2xl font-semibold">Saved Questions</h1>
-      {/* Search and filter */}
+      <Badge variant="secondary" className="text-2xl font-normal rounded-md">
+        {result?.tagTitle}
+      </Badge>
       <div className="flex mt-8 justify-between gap-5 max-sm:flex-col sm:items-center">
-        {/* Search */}
         <LocalSearch
           route="/"
           placeholder="Search Questions"
           otherClasses="flex-1"
         />
-        {/* Filter-> till md screen size , filter is visible */}
-        <Filter filters={QuestionFilters} otherClasses="min-w-[180px]" />
       </div>
       <div className="mt-10 flex flex-col gap-6 w-full">
         {result?.questions.length! > 0 ? (
@@ -48,4 +52,6 @@ export default async function CollectionPage() {
       </div>
     </>
   );
-}
+};
+
+export default TagDetailPage;

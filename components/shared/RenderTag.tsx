@@ -16,7 +16,7 @@ const RenderTag = ({ _id, name, totalQuestions }: Props) => {
       >
         {name}
       </Badge>
-      {totalQuestions}
+      <p className="text-xs">{totalQuestions}</p>
     </Link>
   );
 };
