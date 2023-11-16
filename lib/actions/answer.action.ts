@@ -108,8 +108,8 @@ export async function deleteAnswer(params: DeleteAnswerParams) {
     // Delete the answer
     const answer = await Answer.findById(answerId);
     if (!answer) throw new Error("answer Not found to delete");
+    // Delete answer, views , upvotes and other interactions
     await Answer.deleteOne({ _id: answerId });
-    // Delete all Interactions like views, upvotes , likes etc
     await Interaction.deleteMany({ answer: answerId });
     await Question.updateMany(
       { _id: answer.question },

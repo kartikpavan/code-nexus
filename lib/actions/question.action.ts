@@ -14,12 +14,21 @@ import User from "@/database/models/user.model";
 import { revalidatePath } from "next/cache";
 import Answer from "@/database/models/answer.model";
 import Interaction from "@/database/models/interaction.model";
+import { FilterQuery } from "mongoose";
 
 //! Get Questions (Dynamic route)
 export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDb();
-    const questions = await Question.find({})
+    const { searchQuery } = params;
+    const query: FilterQuery<typeof Question> = {};
+
+    // If there is is search query then search it with title
+    if (searchQuery) {
+      query.$or = [{ title: { $regex: new RegExp(searchQuery, "i") } }];
+    }
+
+    const questions = await Question.find(query)
       .populate({ path: "tags", model: Tag })
       .populate({ path: "author", model: User })
       .sort({ createdAt: -1 });
@@ -156,10 +165,7 @@ export async function deleteQuestion(params: DeleteQuestionParams) {
     // Delete all Interactions like views, upvotes , likes etc
     await Interaction.deleteMany({ question: questionId });
     // Update tags to remove the refrence of the deleted question
-    await Tag.updateMany(
-      { questions: questionId },
-      { $pull: { questions: questionId } }
-    );
+    await Tag.updateMany({ questions: questionId }, { $pull: { questions: questionId } });
     revalidatePath(path);
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
@@ -186,9 +192,7 @@ export async function editQuestion(params: EditQuestionParams) {
 export async function getTopQuestions() {
   try {
     connectToDb();
-    const questions = await Question.find({})
-      .sort({ views: -1, upvotes: -1 })
-      .limit(5);
+    const questions = await Question.find({}).sort({ views: -1, upvotes: -1 }).limit(5);
     return questions;
   } catch (error) {
     if (error instanceof Error) console.log(error.message);

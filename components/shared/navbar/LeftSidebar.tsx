@@ -17,7 +17,7 @@ const LeftSidebar = () => {
           const isActive =
             (currentPath.includes(item.route) && item.route.length > 1) ||
             currentPath === item.route;
-          // getting the userID to navigate to profile detail page
+          // if user is loggedIn then Navigate to profile Detail page
           if (item.route === "/profile") {
             if (userId) {
               item.route = `${item.route}/${userId}`;
@@ -58,7 +58,6 @@ const LeftSidebar = () => {
               <span className="max-lg:hidden">Log In</span>
             </Button>
           </Link>
-
           <Link href="/sign-up">
             <Button variant="secondary" className="w-full">
               <Image

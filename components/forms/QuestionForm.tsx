@@ -34,13 +34,8 @@ const QuestionForm = ({ currentUserID, type, questionDetails }: Props) => {
   const currentPath = usePathname();
   const { theme } = useTheme();
 
-  let parsedQuestionDetails: any;
-  let groupedTags: any;
-
-  if (questionDetails) {
-    parsedQuestionDetails = JSON.parse(questionDetails || "");
-    groupedTags = parsedQuestionDetails.tags.map((tag: any) => tag.name);
-  }
+  const parsedQuestionDetails = questionDetails && JSON.parse(questionDetails || "");
+  const groupedTags = questionDetails && parsedQuestionDetails?.tags.map((tag: any) => tag.name);
 
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
@@ -226,6 +221,9 @@ const QuestionForm = ({ currentUserID, type, questionDetails }: Props) => {
                     placeholder="Add Tags.."
                     onKeyDown={(e) => handleInputKeyDown(e, field)}
                   />
+                  {type === "edit" && (
+                    <p className="text-xs text-red-600">Tags cannot be edited *</p>
+                  )}
                   {field.value.length > 0 ? (
                     <div className="flex flex-start gap-3 pt-2 flex-wrap w-full">
                       {field.value.map((tag: any) => {

@@ -20,7 +20,6 @@ const MobileNav = () => {
     <div>
       <Sheet>
         <SheetTrigger>
-          {/* //! Add a hidden class later */}
           <CgMenuRight size={28} className="cursor-pointer md:hidden" />
         </SheetTrigger>
         <SheetContent side="left">
