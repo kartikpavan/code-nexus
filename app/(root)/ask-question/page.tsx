@@ -11,10 +11,7 @@ const AskQuestionPage = async () => {
   return (
     <>
       <h1 className="text-2xl font-semibold mb-5">Ask Question</h1>
-      <QuestionForm
-        type="create"
-        currentUserID={JSON.stringify(currentUser?._id)}
-      />
+      <QuestionForm type="create" currentUserID={JSON.stringify(currentUser?._id)} />
     </>
   );
 };

@@ -24,7 +24,7 @@ const TagDetailPage = async ({
       </Badge>
       <div className="flex mt-8 justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearch
-          route="/"
+          route={`/tags/${params.id}`}
           placeholder="Search Questions"
           otherClasses="flex-1"
         />

@@ -6,10 +6,10 @@ import { QuestionFilters } from "@/constants/filters";
 import { getSavedPosts } from "@/lib/actions/user.action";
 import { auth } from "@clerk/nextjs";
 
-export default async function CollectionPage() {
+export default async function CollectionPage({ searchParams }: { searchParams: { q: string } }) {
   const { userId } = auth();
   if (!userId) return null;
-  const result = await getSavedPosts({ clerkId: userId });
+  const result = await getSavedPosts({ clerkId: userId, searchQuery: searchParams.q });
   return (
     <>
       {/* Header */}
@@ -17,11 +17,7 @@ export default async function CollectionPage() {
       {/* Search and filter */}
       <div className="flex mt-8 justify-between gap-5 max-sm:flex-col sm:items-center">
         {/* Search */}
-        <LocalSearch
-          route="/"
-          placeholder="Search Questions"
-          otherClasses="flex-1"
-        />
+        <LocalSearch route="/collection" placeholder="Search Questions" otherClasses="flex-1" />
         {/* Filter-> till md screen size , filter is visible */}
         <Filter filters={QuestionFilters} otherClasses="min-w-[180px]" />
       </div>

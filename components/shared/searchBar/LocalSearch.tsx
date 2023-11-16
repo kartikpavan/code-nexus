@@ -30,6 +30,7 @@ const LocalSearch = ({ route, otherClasses, placeholder }: Props) => {
         });
         router.push(newUrl, { scroll: false });
       } else {
+        // if search field is empty then compare the currentpath and route to clear the past queries.
         if (pathName === route) {
           const newUrl = removeKeysFromQuery({
             params: searchParams.toString(),
