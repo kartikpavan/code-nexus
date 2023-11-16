@@ -1,12 +1,6 @@
 "use client";
 import React, { useRef, useState } from "react";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
 import { useForm } from "react-hook-form";
 import { AnswerSchema } from "@/lib/validators";
 import { z } from "zod";
@@ -40,12 +34,14 @@ const AnswerForm = ({ authorId, questionId, question }: Props) => {
   const handleCreateAnswer = async (values: z.infer<typeof AnswerSchema>) => {
     try {
       setIsSubmitting(true);
+      // submit answer
       await createAnswer({
         content: values.answer,
         author: JSON.parse(authorId),
         question: JSON.parse(questionId),
         path: currentPath,
       });
+      // reset TinyMCE editor content
       form.reset();
       if (editorRef.current) {
         const editor = editorRef.current as any;
@@ -67,11 +63,7 @@ const AnswerForm = ({ authorId, questionId, question }: Props) => {
         <h3 className="text-sm font-semibold">
           Write your Answer here <span className="text-red-500">*</span>
         </h3>
-        <Button
-          variant="secondary"
-          className="flex gap-3 text-primary"
-          onClick={() => {}}
-        >
+        <Button variant="secondary" className="flex gap-3 text-primary" onClick={() => {}}>
           <Image src="/icons/magic.svg" alt="magic" width={20} height={20} />
           Generate an AI Answer
         </Button>
@@ -120,8 +112,7 @@ const AnswerForm = ({ authorId, questionId, question }: Props) => {
                         "undo redo | " +
                         "codesample bold italic forecolor | alignleft aligncenter " +
                         "alignright alignjustify | bullist numlist ",
-                      content_style:
-                        "body { font-family:Inter,Arial,sans-serif; font-size:16px }",
+                      content_style: "body { font-family:Inter,Arial,sans-serif; font-size:16px }",
                       skin: theme === "dark" ? "oxide-dark" : "oxide",
                       content_css: theme === "dark" ? "dark" : "light",
                     }}
