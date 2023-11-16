@@ -2,12 +2,12 @@ import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
 import LocalSearch from "@/components/shared/searchBar/LocalSearch";
 import { Badge } from "@/components/ui/badge";
-import { UserFilters } from "@/constants/filters";
+import { TagFilters } from "@/constants/filters";
 import { getAllTags } from "@/lib/actions/tags.action";
 import Link from "next/link";
 
-const TagsPage = async ({ searchParams }: { searchParams: { q: string } }) => {
-  const results = await getAllTags({ searchQuery: searchParams.q });
+const TagsPage = async ({ searchParams }: { searchParams: { q: string; filter: string } }) => {
+  const results = await getAllTags({ searchQuery: searchParams.q, filter: searchParams.filter });
   return (
     <>
       <h1 className="text-2xl font-semibold">All Tags</h1>
@@ -16,11 +16,7 @@ const TagsPage = async ({ searchParams }: { searchParams: { q: string } }) => {
         {/* Search */}
         <LocalSearch route="/tags" placeholder="Search for other users" otherClasses="flex-1" />
         {/* Filter-> till md screen size , filter is visible */}
-        <Filter
-          filters={UserFilters}
-          otherClasses="min-w-[180px]"
-          containerClasses="hidden max-md:flex"
-        />
+        <Filter filters={TagFilters} otherClasses="min-w-[180px]" containerClasses="flex" />
       </div>
       <div className="flex items-center flex-wrap gap-x-5 gap-y-10 mt-10">
         {results?.tags.length! > 0 ? (

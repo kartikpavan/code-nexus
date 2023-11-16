@@ -11,12 +11,31 @@ import User from "@/database/models/user.model";
 export async function getAllTags(params: GetAllTagsParams) {
   try {
     connectToDb();
-    const { searchQuery } = params;
+    const { searchQuery, filter } = params;
     const query: FilterQuery<typeof Tag> = {};
     if (searchQuery) {
       [(query.$or = [{ name: { $regex: new RegExp(searchQuery, "i") } }])];
     }
-    const tags = await Tag.find(query);
+
+    let sortOptions = {};
+    switch (filter) {
+      case "popular":
+        sortOptions = { questions: -1 }; // most questions
+        break;
+      case "recent":
+        sortOptions = { createdAt: -1 };
+        break;
+      case "name":
+        sortOptions = { name: 1 }; // sort by alphabetical order
+        break;
+      case "old":
+        sortOptions = { createdAt: 1 };
+        break;
+      default:
+        break;
+    }
+
+    const tags = await Tag.find(query).sort(sortOptions);
     return { tags };
   } catch (error) {
     if (error instanceof Error) console.log(error.message);

@@ -5,9 +5,10 @@ import LocalSearch from "@/components/shared/searchBar/LocalSearch";
 import { UserFilters } from "@/constants/filters";
 import { getAllUsers } from "@/lib/actions/user.action";
 
-const CommunityPage = async ({ searchParams }: { searchParams: { q: string } }) => {
+const CommunityPage = async ({ searchParams }: { searchParams: { q: string; filter: string } }) => {
   const results = await getAllUsers({
     searchQuery: searchParams.q,
+    filter: searchParams.filter,
   });
   return (
     <>
@@ -19,11 +20,7 @@ const CommunityPage = async ({ searchParams }: { searchParams: { q: string } }) 
           placeholder="Search for other users"
           otherClasses="flex-1"
         />
-        <Filter
-          filters={UserFilters}
-          otherClasses="min-w-[180px]"
-          containerClasses="hidden max-md:flex"
-        />
+        <Filter filters={UserFilters} otherClasses="min-w-[180px]" containerClasses="flex" />
       </div>
       {/* Tags */}
       <div className="flex flex-wrap gap-5 mt-10">

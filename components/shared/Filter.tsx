@@ -1,3 +1,4 @@
+"use client";
 import {
   Select,
   SelectContent,
@@ -6,6 +7,8 @@ import {
   SelectValue,
   SelectGroup,
 } from "@/components/ui/select";
+import { createCustomURL } from "@/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Props {
   filters: { name: string; value: string }[];
@@ -14,9 +17,28 @@ interface Props {
 }
 
 const Filter = ({ otherClasses, containerClasses, filters }: Props) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const query = searchParams.get("filter");
+
+  const handleChangeFilter = (item: string) => {
+    const newUrl = createCustomURL({
+      params: searchParams.toString(),
+      key: "filter",
+      value: item.toLowerCase(),
+    });
+    router.push(newUrl, { scroll: false });
+  };
+
   return (
     <div className={`${containerClasses}`}>
-      <Select>
+      <Select
+        onValueChange={(value) => {
+          handleChangeFilter(value);
+        }}
+        defaultValue={query || undefined}
+      >
         <SelectTrigger className={`${otherClasses}`}>
           <div className="line-clamp-1 flex-1 text-left">
             <SelectValue placeholder="Select a Filter" />

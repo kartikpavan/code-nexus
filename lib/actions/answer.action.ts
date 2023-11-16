@@ -29,10 +29,29 @@ export async function createAnswer(params: CreateAnswerParams) {
 export async function getAnswers(params: GetAnswersParams) {
   try {
     connectToDb();
-    const { questionId } = params;
+    const { questionId, filter, page } = params;
+
+    let sortOptions = {};
+    switch (filter) {
+      case "highestupvotes":
+        sortOptions = { upvotes: -1 };
+        break;
+      case "lowestupvotes":
+        sortOptions = { upvotes: 1 };
+        break;
+      case "recent":
+        sortOptions = { createdAt: -1 };
+        break;
+      case "old":
+        sortOptions = { createdAt: 1 };
+        break;
+      default:
+        break;
+    }
+
     const answers = await Answer.find({ question: questionId })
       .populate("author", "_id clerkId name picture")
-      .sort({ createdAt: -1 });
+      .sort(sortOptions);
     return { answers };
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
@@ -111,10 +130,7 @@ export async function deleteAnswer(params: DeleteAnswerParams) {
     // Delete answer, views , upvotes and other interactions
     await Answer.deleteOne({ _id: answerId });
     await Interaction.deleteMany({ answer: answerId });
-    await Question.updateMany(
-      { _id: answer.question },
-      { $pull: { answers: answerId } }
-    );
+    await Question.updateMany({ _id: answer.question }, { $pull: { answers: answerId } });
     revalidatePath(path);
   } catch (error) {
     if (error instanceof Error) console.log(error.message);

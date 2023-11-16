@@ -12,7 +12,13 @@ import { auth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 
-const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
+const QuestionDetailPage = async ({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams: { filter: string; page: number };
+}) => {
   const { userId: clerkId } = auth();
   let currentUser;
   if (clerkId) {
@@ -22,11 +28,8 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
   return (
     <div>
       <div className="flex items-start w-full flex-col">
-        <div className="flex w-full flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
-          <Link
-            href={`/profile/${question.author.clerkId}`}
-            className="flex items-center gap-1"
-          >
+        <div className="flex w-full flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
+          <Link href={`/profile/${question.author.clerkId}`} className="flex items-center gap-1">
             <Image
               src={question.author.picture}
               alt={question.author.name}
@@ -34,10 +37,7 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
               height={22}
               className="rounded-full"
             />
-            <Badge
-              variant="secondary"
-              className="text-sm font-normal rounded-md"
-            >
+            <Badge variant="secondary" className="text-sm font-normal rounded-md">
               {question.author.name}
             </Badge>
           </Link>
@@ -53,9 +53,7 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
             hasSaved={currentUser?.savedPost?.includes(question._id)}
           />
         </div>
-        <h2 className="font-xl sm:text-2xl mt-3 w-full text-left">
-          {question.title}
-        </h2>
+        <h2 className="font-xl sm:text-2xl mt-3 w-full text-left">{question.title}</h2>
       </div>
       {/* Stats */}
       <div className="mb-8 mt-5 flex flex-wrap gap-4">
@@ -98,6 +96,8 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
         questionId={question._id}
         authorId={currentUser?._id}
         totalAnswers={question.answers.length}
+        filter={searchParams?.filter}
+        page={searchParams?.page}
       />
       {/* Answer field */}
       <AnswerForm

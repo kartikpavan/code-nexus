@@ -6,10 +6,18 @@ import { QuestionFilters } from "@/constants/filters";
 import { getSavedPosts } from "@/lib/actions/user.action";
 import { auth } from "@clerk/nextjs";
 
-export default async function CollectionPage({ searchParams }: { searchParams: { q: string } }) {
+export default async function CollectionPage({
+  searchParams,
+}: {
+  searchParams: { q: string; filter: string };
+}) {
   const { userId } = auth();
   if (!userId) return null;
-  const result = await getSavedPosts({ clerkId: userId, searchQuery: searchParams.q });
+  const result = await getSavedPosts({
+    clerkId: userId,
+    searchQuery: searchParams.q,
+    filter: searchParams.filter,
+  });
   return (
     <>
       {/* Header */}
