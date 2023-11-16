@@ -44,16 +44,14 @@ const Filter = ({ otherClasses, containerClasses, filters }: Props) => {
             <SelectValue placeholder="Select a Filter" />
           </div>
         </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            {filters.map((item) => {
-              return (
-                <SelectItem key={item.value} value={item.value}>
-                  {item.name}
-                </SelectItem>
-              );
-            })}
-          </SelectGroup>
+        <SelectContent className="z-50">
+          {filters.map((item) => {
+            return (
+              <SelectItem className="z-50" key={item.value} value={item.value}>
+                {item.name}
+              </SelectItem>
+            );
+          })}
         </SelectContent>
       </Select>
     </div>

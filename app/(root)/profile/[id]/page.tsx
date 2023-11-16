@@ -36,17 +36,11 @@ const UserProfileDetailPage = async ({
             <div className="mt-5 flex flex-wrap items-center justify-start gap-5">
               {/* Portfolio website */}
               {userInfo?.user.portfolioWebsite && (
-                <ProfileLink
-                  imageUrl={"/icons/link.svg"}
-                  title={userInfo.user.portfolioWebsite}
-                />
+                <ProfileLink imageUrl={"/icons/link.svg"} title={userInfo.user.portfolioWebsite} />
               )}
               {/* Location */}
               {userInfo?.user.location && (
-                <ProfileLink
-                  imageUrl={"/icons/location.svg"}
-                  title={userInfo.user.location}
-                />
+                <ProfileLink imageUrl={"/icons/location.svg"} title={userInfo.user.location} />
               )}
               {/* Joined At */}
               <ProfileLink
@@ -71,10 +65,7 @@ const UserProfileDetailPage = async ({
       </div>
       {/* Stats */}
       <div className="mt-5">
-        <Stats
-          totalQuestions={userInfo?.totalQuestions}
-          totalAnswers={userInfo?.totalAnswers}
-        />
+        <Stats totalQuestions={userInfo?.totalQuestions} totalAnswers={userInfo?.totalAnswers} />
       </div>
       {/* Top Posts or Top Answers */}
       <div className="mt-10 flex gap-10">
@@ -91,11 +82,7 @@ const UserProfileDetailPage = async ({
             />
           </TabsContent>
           <TabsContent value="answers" className="flex flex-col gap-2">
-            <AnswerTab
-              searchParams={searchParams}
-              userId={userInfo?.user._id}
-              clerkId={clerkId}
-            />
+            <AnswerTab searchParams={searchParams} userId={userInfo?.user._id} clerkId={clerkId} />
           </TabsContent>
         </Tabs>
       </div>
