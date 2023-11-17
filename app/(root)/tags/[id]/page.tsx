@@ -1,5 +1,6 @@
 import QuestionCard from "@/components/cards/QuestionCard";
 import NoResult from "@/components/shared/NoResult";
+import Pagination from "@/components/shared/Pagination";
 import LocalSearch from "@/components/shared/searchBar/LocalSearch";
 import { Badge } from "@/components/ui/badge";
 import { getQuestionsByTagId } from "@/lib/actions/tags.action";
@@ -10,17 +11,17 @@ const TagDetailPage = async ({
   searchParams,
 }: {
   params: { id: string };
-  searchParams: { q: string };
+  searchParams: { q: string; page: string };
 }) => {
-  const result = await getQuestionsByTagId({
+  const results = await getQuestionsByTagId({
     tagId: params.id,
-    page: 1,
+    page: searchParams?.page ? Number(searchParams.page) : 1,
     searchQuery: searchParams.q,
   });
   return (
     <>
       <Badge variant="secondary" className="text-2xl font-normal rounded-md">
-        {result?.tagTitle}
+        {results?.tagTitle}
       </Badge>
       <div className="flex mt-8 justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearch
@@ -30,8 +31,8 @@ const TagDetailPage = async ({
         />
       </div>
       <div className="mt-10 flex flex-col gap-6 w-full">
-        {result?.questions.length! > 0 ? (
-          result?.questions.map((ques: any) => {
+        {results?.questions.length! > 0 ? (
+          results?.questions.map((ques: any) => {
             return (
               <QuestionCard
                 key={ques._id}
@@ -49,6 +50,12 @@ const TagDetailPage = async ({
         ) : (
           <NoResult />
         )}
+      </div>
+      <div className="mt-8">
+        <Pagination
+          pageNumber={searchParams?.page ? Number(searchParams.page) : 1}
+          nextPageExist={results?.isNext}
+        />
       </div>
     </>
   );

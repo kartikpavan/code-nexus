@@ -29,8 +29,9 @@ export async function createAnswer(params: CreateAnswerParams) {
 export async function getAnswers(params: GetAnswersParams) {
   try {
     connectToDb();
-    const { questionId, filter, page } = params;
-
+    const { questionId, filter, page = 1, pageSize = 5 } = params;
+    // Calculate the amount of answers to skip based on the pageNumber and pageSize
+    const skip = pageSize * (page - 1);
     let sortOptions = {};
     switch (filter) {
       case "highestupvotes":
@@ -51,8 +52,13 @@ export async function getAnswers(params: GetAnswersParams) {
 
     const answers = await Answer.find({ question: questionId })
       .populate("author", "_id clerkId name picture")
+      .skip(skip)
+      .limit(pageSize)
       .sort(sortOptions);
-    return { answers };
+    const answerCount = await Answer.countDocuments({ question: questionId });
+
+    const isNext = answerCount > answers.length + skip;
+    return { answers, isNext };
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
   }

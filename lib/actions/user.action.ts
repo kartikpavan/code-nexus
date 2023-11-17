@@ -76,6 +76,8 @@ export async function getAllUsers(params: GetAllUsersParams) {
   try {
     connectToDb();
     const { page = 1, pageSize = 20, filter, searchQuery } = params;
+    // Calculate the number of users to skip based on the page Number and size
+    const skip = pageSize * (page - 1);
     const query: FilterQuery<typeof User> = {};
 
     if (searchQuery) {
@@ -100,8 +102,10 @@ export async function getAllUsers(params: GetAllUsersParams) {
         break;
     }
 
-    const users = await User.find(query).sort(sortOptions);
-    return { users };
+    const users = await User.find(query).skip(skip).limit(pageSize).sort(sortOptions);
+    const totalUsers = await User.countDocuments(query);
+    const isNext = totalUsers > skip + users.length;
+    return { users, isNext };
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
   }
@@ -133,6 +137,8 @@ export async function getSavedPosts(params: GetSavedQuestionsParams) {
   try {
     connectToDb();
     const { clerkId, page = 1, pageSize = 10, filter, searchQuery } = params;
+    // Calculate the number of posts to skip based on the pageNumber and pageSize
+    const skip = pageSize * (page - 1);
 
     const query: FilterQuery<typeof Question> = {};
     if (searchQuery) {
@@ -163,16 +169,18 @@ export async function getSavedPosts(params: GetSavedQuestionsParams) {
     const user = await User.findOne({ clerkId }).populate({
       path: "savedPost",
       match: query,
-      options: { sort: sortOptions },
+      options: { sort: sortOptions, skip: skip, limit: pageSize + 1 },
       populate: [
         { path: "tags", model: Tag, select: "_id name" },
         { path: "author", model: User, select: "_id name clerkId picture" },
       ],
     });
+    const isNext = user.savedPost.length > pageSize;
     if (!user) throw new Error("User not Found");
 
     const savedQuestions = await user.savedPost;
-    return { questions: savedQuestions };
+
+    return { questions: savedQuestions, isNext };
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
   }

@@ -1,14 +1,20 @@
 import UserCard from "@/components/cards/UserCard";
 import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
+import Pagination from "@/components/shared/Pagination";
 import LocalSearch from "@/components/shared/searchBar/LocalSearch";
 import { UserFilters } from "@/constants/filters";
 import { getAllUsers } from "@/lib/actions/user.action";
 
-const CommunityPage = async ({ searchParams }: { searchParams: { q: string; filter: string } }) => {
+const CommunityPage = async ({
+  searchParams,
+}: {
+  searchParams: { q: string; filter: string; page: string };
+}) => {
   const results = await getAllUsers({
     searchQuery: searchParams.q,
     filter: searchParams.filter,
+    page: searchParams?.page ? Number(searchParams.page) : 1,
   });
   return (
     <>
@@ -31,6 +37,12 @@ const CommunityPage = async ({ searchParams }: { searchParams: { q: string; filt
         ) : (
           <NoResult />
         )}
+      </div>
+      <div className="mt-8">
+        <Pagination
+          pageNumber={searchParams?.page ? Number(searchParams.page) : 1}
+          nextPageExist={results?.isNext}
+        />
       </div>
     </>
   );

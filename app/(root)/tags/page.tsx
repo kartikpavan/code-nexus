@@ -1,13 +1,22 @@
 import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
+import Pagination from "@/components/shared/Pagination";
 import LocalSearch from "@/components/shared/searchBar/LocalSearch";
 import { Badge } from "@/components/ui/badge";
 import { TagFilters } from "@/constants/filters";
 import { getAllTags } from "@/lib/actions/tags.action";
 import Link from "next/link";
 
-const TagsPage = async ({ searchParams }: { searchParams: { q: string; filter: string } }) => {
-  const results = await getAllTags({ searchQuery: searchParams.q, filter: searchParams.filter });
+const TagsPage = async ({
+  searchParams,
+}: {
+  searchParams: { q: string; filter: string; page: string };
+}) => {
+  const results = await getAllTags({
+    searchQuery: searchParams.q,
+    filter: searchParams.filter,
+    page: searchParams?.page ? Number(searchParams.page) : 1,
+  });
   return (
     <>
       <h1 className="text-2xl font-semibold">All Tags</h1>
@@ -44,6 +53,12 @@ const TagsPage = async ({ searchParams }: { searchParams: { q: string; filter: s
         ) : (
           <NoResult />
         )}
+      </div>
+      <div className="mt-8">
+        <Pagination
+          pageNumber={searchParams?.page ? Number(searchParams.page) : 1}
+          nextPageExist={results?.isNext}
+        />
       </div>
     </>
   );

@@ -11,7 +11,9 @@ import User from "@/database/models/user.model";
 export async function getAllTags(params: GetAllTagsParams) {
   try {
     connectToDb();
-    const { searchQuery, filter } = params;
+    const { searchQuery, filter, page = 1, pageSize = 10 } = params;
+    // Calculate the amount of posts to skip based on the pageNumber and pageSize
+    const skip = pageSize * (page - 1);
     const query: FilterQuery<typeof Tag> = {};
     if (searchQuery) {
       [(query.$or = [{ name: { $regex: new RegExp(searchQuery, "i") } }])];
@@ -35,8 +37,10 @@ export async function getAllTags(params: GetAllTagsParams) {
         break;
     }
 
-    const tags = await Tag.find(query).sort(sortOptions);
-    return { tags };
+    const tags = await Tag.find(query).skip(skip).limit(pageSize).sort(sortOptions);
+    const totalTags = await Tag.countDocuments(query);
+    const isNext = totalTags > skip + tags.length;
+    return { tags, isNext };
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
   }
@@ -46,22 +50,24 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
   try {
     connectToDb();
     const { tagId, page = 1, pageSize = 10, searchQuery } = params;
+    // Calculate the amount of posts to skip based on the page Number and page size
+    const skip = pageSize * (page - 1);
     const tagFilter: FilterQuery<ITag> = { _id: tagId };
     const tag = await Tag.findOne(tagFilter).populate({
       path: "questions",
       model: Question,
       match: searchQuery ? { title: { $regex: searchQuery, $options: "i" } } : {},
-      options: { sort: { createdAt: -1 } },
+      options: { sort: { createdAt: -1 }, skip: skip, limit: pageSize + 1 },
       populate: [
         { path: "tags", model: Tag, select: "_id name" },
         { path: "author", model: User, select: "_id name clerkId picture" },
       ],
     });
-
+    const isNext = tag.questions.length > pageSize;
     if (!tag) throw new Error("Tag not Found");
 
     const questions = tag.questions;
-    return { tagTitle: tag.name, questions };
+    return { tagTitle: tag.name, questions, isNext };
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
   }

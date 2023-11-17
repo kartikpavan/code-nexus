@@ -25,6 +25,8 @@ const Pagination = ({ pageNumber, nextPageExist }: Props) => {
     router.push(newURL);
   };
 
+  if (!nextPageExist && pageNumber === 1) return null;
+
   return (
     <div className="flex items-center justify-center gap-3">
       <Button
