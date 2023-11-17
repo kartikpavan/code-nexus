@@ -20,9 +20,11 @@ import { FilterQuery } from "mongoose";
 export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDb();
-    const { searchQuery, filter } = params;
+    const { searchQuery, filter, page = 1, pageSize = 10 } = params;
+    // Calculate the number of post to skip based on the page number and size
+    const skip = (page - 1) * pageSize;
+    // Check for query Params
     const query: FilterQuery<typeof Question> = {};
-
     // If there is is search query then search it with title
     if (searchQuery) {
       query.$or = [{ title: { $regex: new RegExp(searchQuery, "i") } }];
@@ -48,8 +50,16 @@ export async function getQuestions(params: GetQuestionsParams) {
     const questions = await Question.find(query)
       .populate({ path: "tags", model: Tag })
       .populate({ path: "author", model: User })
+      .skip(skip)
+      .limit(pageSize)
       .sort(sortOptions);
-    return { questions };
+
+    // Check if next Page Exists to show more results
+    const totalQuestions = await Question.countDocuments(query);
+    // if we have 100 ques, and have skipped 4 pages of 20 and we have 20 on last page
+    const isNext = totalQuestions > skip + questions.length;
+
+    return { questions, isNext };
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
   }

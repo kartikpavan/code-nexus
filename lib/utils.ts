@@ -58,8 +58,7 @@ export function createCustomURL({
   key: string;
   value: string | null;
 }) {
-  // The package allows you to easily parse a query string (the part of a URL after the "?") into a JavaScript object.
-  //This is useful when you need to extract parameters from a URL.
+  // The package allows you to easily parse a query string (the part of a URL after the "?") into a JavaScript object.This is useful when you need to extract parameters from a URL.
   const currentUrl = qs.parse(params);
   currentUrl[key] = value; // setting queryParams : q = searchTerm
 
