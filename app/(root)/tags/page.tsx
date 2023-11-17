@@ -21,7 +21,7 @@ const TagsPage = async ({
     <>
       <h1 className="text-2xl font-semibold">All Tags</h1>
       {/* Search and filter */}
-      <div className="flex mt-8 justify-between gap-5 max-sm:flex-col sm:items-center">
+      <div className="flex mt-8 justify-between gap-5 max-sm:flex-col-reverse sm:items-center">
         {/* Search */}
         <LocalSearch route="/tags" placeholder="Search for other users" otherClasses="flex-1" />
         {/* Filter-> till md screen size , filter is visible */}

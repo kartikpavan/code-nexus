@@ -20,7 +20,7 @@ const CommunityPage = async ({
     <>
       <h1 className="text-2xl font-semibold">All Users</h1>
       {/* Search and filter */}
-      <div className="flex mt-8 justify-between gap-5 max-sm:flex-col sm:items-center">
+      <div className="flex mt-8 justify-between gap-5 max-sm:flex-col-reverse sm:items-center">
         <LocalSearch
           route="/community"
           placeholder="Search for other users"

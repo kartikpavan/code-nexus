@@ -25,7 +25,7 @@ export default async function CollectionPage({
       {/* Header */}
       <h1 className="text-2xl font-semibold">Saved Questions</h1>
       {/* Search and filter */}
-      <div className="flex mt-8 justify-between gap-5 max-sm:flex-col sm:items-center">
+      <div className="flex mt-8 justify-between gap-5 max-sm:flex-col-reverse sm:items-center">
         {/* Search */}
         <LocalSearch route="/collection" placeholder="Search Questions" otherClasses="flex-1" />
         {/* Filter-> till md screen size , filter is visible */}
