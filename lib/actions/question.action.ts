@@ -70,7 +70,6 @@ export async function createQuestion(params: CreateQuestionParams) {
   try {
     connectToDb();
     const { title, author, content, tags, path } = params;
-    console.log(author);
     // Creating and saving question inside DB
     const question = await Question.create({
       title,
@@ -92,6 +91,16 @@ export async function createQuestion(params: CreateQuestionParams) {
     await Question.findByIdAndUpdate(question._id, {
       $push: { tags: { $each: tagDocuments } },
     });
+    //create an interaction
+    await Interaction.create({
+      user: author,
+      question: question._id,
+      action: "ask_question",
+      tags: tagDocuments,
+    });
+    // Increase author respectScore to +10 for asking a question
+    await User.findByIdAndUpdate(author, { $inc: { respectScore: 5 } });
+
     revalidatePath(path);
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
@@ -142,7 +151,14 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
       new: true,
     });
     if (!question) throw new Error("Question not found");
-    // TODO: Author will get +10 Points for every upvotes he gets
+    // user who will upvote will get +1/-1 reputation point
+    await User.findByIdAndUpdate(userId, {
+      $inc: { respectScore: hasupVoted ? -1 : 1 },
+    });
+    // Author will get +10/-10 Points for every upvotes he gets
+    await User.findByIdAndUpdate(question.author, {
+      $inc: { respectScore: hasupVoted ? -10 : 10 },
+    });
     revalidatePath(path);
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
@@ -173,7 +189,14 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
     });
     if (!question) throw new Error("Question not found");
 
-    // TODO: Author will get +10 Points for every upvotes he gets
+    // user who will upvote will get +1/-1 reputation point
+    await User.findByIdAndUpdate(userId, {
+      $inc: { respectScore: hasdownVoted ? -2 : 2 },
+    });
+    // Author will get +10/-10 Points for every downvote he gets
+    await User.findByIdAndUpdate(question.author, {
+      $inc: { respectScore: hasdownVoted ? -10 : 10 },
+    });
     revalidatePath(path);
   } catch (error) {
     if (error instanceof Error) console.log(error.message);

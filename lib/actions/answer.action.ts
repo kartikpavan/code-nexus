@@ -10,6 +10,7 @@ import Answer from "@/database/models/answer.model";
 import Question from "@/database/models/question.model";
 import { revalidatePath } from "next/cache";
 import Interaction from "@/database/models/interaction.model";
+import User from "@/database/models/user.model";
 
 export async function createAnswer(params: CreateAnswerParams) {
   try {
@@ -17,9 +18,19 @@ export async function createAnswer(params: CreateAnswerParams) {
     const { content, author, question, path } = params;
     const newAnswer = await Answer.create({ content, author, question });
     // Answer needs to added to a particular question answer array
-    await Question.findByIdAndUpdate(question, {
+    const questionObject = await Question.findByIdAndUpdate(question, {
       $push: { answers: newAnswer._id },
     });
+    // Interaction is for Recommendation System
+    await Interaction.create({
+      user: author,
+      action: "answer",
+      question: question,
+      answer: newAnswer._id,
+      tags: questionObject.tags,
+    });
+    // Reputation is for Badge System
+    await User.findByIdAndUpdate(author, { $inc: { respectScore: 10 } });
     revalidatePath(path); // refreshes the question detail page
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
@@ -58,6 +69,7 @@ export async function getAnswers(params: GetAnswersParams) {
     const answerCount = await Answer.countDocuments({ question: questionId });
 
     const isNext = answerCount > answers.length + skip;
+
     return { answers, isNext };
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
@@ -87,7 +99,14 @@ export async function upvoteAnswer(params: AnswerVoteParams) {
       new: true,
     });
     if (!answer) throw new Error("Answer not found");
-    // TODO: Author will get +10 Points for every upvotes he gets
+    //User who will upvote will get +2 Points
+    await User.findByIdAndUpdate(userId, {
+      $inc: { respectScore: hasupVoted ? -2 : 2 },
+    });
+    // Author whoose answer will get upvote will get +10 points
+    await User.findByIdAndUpdate(answer.author, {
+      $inc: { respectScore: hasupVoted ? -10 : 10 },
+    });
     revalidatePath(path);
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
@@ -118,7 +137,14 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
     });
     if (!answer) throw new Error("Answer not found");
 
-    // TODO: Author will get +10 Points for every upvotes he gets
+    //User who will downvote will get 10 Points
+    await User.findByIdAndUpdate(userId, {
+      $inc: { respectScore: hasdownVoted ? -2 : 2 },
+    });
+    // Author whoose answer will get upvote will get -10 points
+    await User.findByIdAndUpdate(answer.author, {
+      $inc: { respectScore: hasdownVoted ? -10 : 10 },
+    });
     revalidatePath(path);
   } catch (error) {
     if (error instanceof Error) console.log(error.message);
