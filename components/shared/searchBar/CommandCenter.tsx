@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoReload } from "react-icons/io5";
 import SearchFilters from "./SearchFilters";
+import { globalSearch } from "@/lib/actions/global.action";
 
 const dummyData = [
   { type: "question", id: "1", title: "NextJs Question" },
@@ -16,7 +17,7 @@ const dummyData = [
 const CommandCenter = () => {
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [results, setResults] = useState(dummyData);
+  const [results, setResults] = useState([]);
 
   const type = searchParams.get("type");
   const global = searchParams.get("global");
@@ -27,6 +28,8 @@ const CommandCenter = () => {
       setIsLoading(true);
       try {
         // Search Everywhere , everything inside DB
+        const res = await globalSearch({ query: global, typeOfSearch: type?.toLowerCase() });
+        setResults(JSON.parse(res!));
       } catch (error) {
         if (error instanceof Error) {
           console.log(error.message);
@@ -36,14 +39,29 @@ const CommandCenter = () => {
         setIsLoading(false);
       }
     };
+
+    if (global) {
+      fetchResults();
+    }
   }, [global, type]);
 
-  const renderLink = (type: string, id: string): string => {
-    return "/";
+  const renderLink = (type: string, id: string) => {
+    switch (type) {
+      case "question":
+        return `/question/${id}`;
+      case "answer":
+        return `/question/${id}`;
+      case "user":
+        return `/profile/${id}`;
+      case "tag":
+        return `/tags/${id}`;
+      default:
+        return "/";
+    }
   };
 
   return (
-    <div className="p-5 max-w-5xl w-[75%] absolute top-full z-10 bg-secondary rounded-lg">
+    <div className="p-5 max-w-5xl w-[70%] absolute top-full z-10 bg-secondary rounded-lg">
       <div>
         <SearchFilters />
       </div>
@@ -65,7 +83,7 @@ const CommandCenter = () => {
                 return (
                   <Link
                     key={item.type + item.id + idx}
-                    href={renderLink("type", "id")}
+                    href={renderLink(item.type, item.id)}
                     className="flex w-full cursor-pointer gap-2 px-5 py-2 dark:hover:bg-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-150 ease-in-out"
                   >
                     <Image

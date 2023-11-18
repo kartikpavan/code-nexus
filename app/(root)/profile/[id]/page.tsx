@@ -45,7 +45,7 @@ const UserProfileDetailPage = async ({
               {/* Joined At */}
               <ProfileLink
                 imageUrl={"/icons/calendar.svg"}
-                title={formatDateToCustomFormat(userInfo?.user.joinedAt)}
+                title={formatDateToCustomFormat(userInfo?.user?.joinedAt)}
               />
             </div>
             {/* Bio */}
