@@ -50,7 +50,6 @@ const ActionBtn = ({ type, itemId }: Props) => {
           onClick={handleEdit}
         />
       )}
-
       <AlertDialog>
         <AlertDialogTrigger>
           <Image

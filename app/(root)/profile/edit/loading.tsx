@@ -10,7 +10,7 @@ const ProfileEditLoading = () => {
           return <Skeleton key={idx + 1} className="h-10 w-full" />;
         })}
       </div>
-      <Skeleton className="h-12 w-[25%]" />
+      <Skeleton className="h-12 w-32 mt-5" />
     </>
   );
 };

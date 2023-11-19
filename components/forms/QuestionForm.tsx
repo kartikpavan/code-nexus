@@ -22,7 +22,7 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { Suspense, useRef, useState } from "react";
 import { Badge } from "../ui/badge";
 import { useTheme } from "next-themes";
-import AskQuestionLoading from "@/app/(root)/ask-question/loading";
+import { useToast } from "../ui/use-toast";
 
 interface Props {
   currentUserID: string;
@@ -34,6 +34,7 @@ const QuestionForm = ({ currentUserID, type, questionDetails }: Props) => {
   const router = useRouter();
   const currentPath = usePathname();
   const { theme } = useTheme();
+  const { toast } = useToast();
 
   const parsedQuestionDetails = questionDetails && JSON.parse(questionDetails || "");
   const groupedTags = questionDetails && parsedQuestionDetails?.tags.map((tag: any) => tag.name);
@@ -104,6 +105,9 @@ const QuestionForm = ({ currentUserID, type, questionDetails }: Props) => {
         });
         setIsSubmitting(false);
         router.push(`/question/${parsedQuestionDetails._id}`);
+        return toast({
+          title: `Question Modified Successfully`,
+        });
       } else {
         setIsSubmitting(true);
         await createQuestion({
@@ -115,11 +119,18 @@ const QuestionForm = ({ currentUserID, type, questionDetails }: Props) => {
         });
         setIsSubmitting(false);
         router.push("/");
+        return toast({
+          title: `Your Question is Live!`,
+        });
       }
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
         setIsSubmitting(false);
+        return toast({
+          title: `Error: Unable to Post Question"`,
+          variant: "destructive",
+        });
       }
     } finally {
       setIsSubmitting(false);

@@ -7,7 +7,7 @@ import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
 import { savePost } from "@/lib/actions/user.action";
 import { useEffect } from "react";
 import { viewFunction } from "@/lib/actions/interaction.action";
-
+import { useToast } from "@/components/ui/use-toast";
 interface Props {
   type: "question" | "answer";
   itemId: string;
@@ -31,8 +31,15 @@ const Votes = ({
 }: Props) => {
   const pathName = usePathname();
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleVote = async (action: "upvote" | "downvote") => {
+    if (!userId)
+      return toast({
+        title: "Please Log In",
+        description: "You must be logged-in to perform this action",
+        variant: "destructive",
+      });
     // UPVOTE
     if (action === "upvote") {
       if (type === "question") {
@@ -54,8 +61,11 @@ const Votes = ({
           path: pathName,
         });
       }
-      // TODO : Toast Notification
-      return;
+      // Toast Notification
+      return toast({
+        title: `Upvote ${hasUserUpvoted ? "Removed" : "Successfull"}`,
+        variant: !hasUserUpvoted ? "default" : "destructive",
+      });
     }
     // DOWNVOTE
     if (action === "downvote") {
@@ -79,7 +89,10 @@ const Votes = ({
         });
       }
       // TODO : Toast Notification
-      return;
+      return toast({
+        title: `Downvote ${hasUserDownVoted ? "Removed" : "Successfull"}`,
+        variant: !hasUserDownVoted ? "default" : "destructive",
+      });
     }
   };
 

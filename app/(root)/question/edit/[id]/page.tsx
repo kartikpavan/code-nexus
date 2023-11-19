@@ -3,7 +3,8 @@ import { getQuestionById } from "@/lib/actions/question.action";
 import { getUser } from "@/lib/actions/user.action";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
+import EditQuestionLoading from "./loading";
 
 const EditPost = async ({ params }: { params: { id: string } }) => {
   const { userId } = auth();
@@ -13,14 +14,16 @@ const EditPost = async ({ params }: { params: { id: string } }) => {
   const result = await getQuestionById({ questionId: params.id });
   return (
     <>
-      <h1 className="text-2xl font-semibold mb-5">Edit Question</h1>
-      <div>
-        <QuestionForm
-          type="edit"
-          currentUserID={JSON.stringify(currentUser?._id)}
-          questionDetails={JSON.stringify(result)}
-        />
-      </div>
+      <Suspense fallback={<EditQuestionLoading />}>
+        <h1 className="text-2xl font-semibold mb-5">Edit Question</h1>
+        <div>
+          <QuestionForm
+            type="edit"
+            currentUserID={JSON.stringify(currentUser?._id)}
+            questionDetails={JSON.stringify(result)}
+          />
+        </div>
+      </Suspense>
     </>
   );
 };

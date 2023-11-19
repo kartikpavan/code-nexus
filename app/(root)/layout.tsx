@@ -2,7 +2,7 @@ import LeftSidebar from "@/components/shared/navbar/LeftSidebar";
 import Navbar from "@/components/shared/navbar/Navbar";
 import RightSidebar from "@/components/shared/navbar/RightSidebar";
 import React, { PropsWithChildren } from "react";
-
+import { Toaster } from "@/components/ui/toaster";
 const RootLayout = ({ children }: PropsWithChildren) => {
   return (
     <main className="relative">
@@ -19,6 +19,7 @@ const RootLayout = ({ children }: PropsWithChildren) => {
         {/* Right sidebar */}
         <RightSidebar />
       </section>
+      <Toaster />
     </main>
   );
 };

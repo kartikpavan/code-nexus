@@ -18,11 +18,13 @@ import { useState } from "react";
 import { EditProfileSchema } from "@/lib/validators";
 import { usePathname, useRouter } from "next/navigation";
 import { updateUser } from "@/lib/actions/user.action";
+import { useToast } from "../ui/use-toast";
 
 const ProfileForm = ({ clerkId, user }: { clerkId: string; user: string }) => {
   const router = useRouter();
   const pathName = usePathname();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const { toast } = useToast();
 
   const parsedUser = JSON.parse(user);
 
@@ -51,6 +53,9 @@ const ProfileForm = ({ clerkId, user }: { clerkId: string; user: string }) => {
           portfolioWebsite: values.portfolio,
         },
         path: pathName,
+      });
+      toast({
+        title: "Success: Your Profile has been Modified",
       });
       router.back();
     } catch (error) {
