@@ -19,9 +19,10 @@ import { Input } from "@/components/ui/input";
 import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useRef, useState } from "react";
+import React, { Suspense, useRef, useState } from "react";
 import { Badge } from "../ui/badge";
 import { useTheme } from "next-themes";
+import AskQuestionLoading from "@/app/(root)/ask-question/loading";
 
 interface Props {
   currentUserID: string;
@@ -126,147 +127,152 @@ const QuestionForm = ({ currentUserID, type, questionDetails }: Props) => {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(submitHandler)} className="flex flex-col w-full space-y-6">
-        {/* Title */}
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Question title <span className="text-red-500">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormDescription className="text-light italic text-primary/70 text-xs">
-                Be specific and imagine you are asking a question to another person
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* Explaination */}
-        <FormField
-          control={form.control}
-          name="explanation"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Detailed explaination of your problem <span className="text-red-500">*</span>
-              </FormLabel>
-              <FormControl>
-                <Editor
-                  apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
-                  onInit={(evt, editor) => {
-                    // @ts-ignore
-                    editorRef.current = editor;
-                  }}
-                  onBlur={field.onBlur}
-                  onEditorChange={(content) => field.onChange(content)}
-                  initialValue={parsedQuestionDetails?.content || ""}
-                  init={{
-                    height: 350,
-                    menubar: false,
-                    plugins: [
-                      "advlist",
-                      "autolink",
-                      "lists",
-                      "link",
-                      "image",
-                      "charmap",
-                      "print",
-                      "preview",
-                      "anchor",
-                      "searchreplace",
-                      "visualblocks",
-                      "codesample",
-                      "fullscreen",
-                      "insertdatetime",
-                      "media",
-                      "table",
-                    ],
-                    toolbar:
-                      "undo redo | " +
-                      "codesample bold italic forecolor | alignleft aligncenter " +
-                      "alignright alignjustify | bullist numlist ",
-                    content_style: "body { font-family:Inter,Arial,sans-serif; font-size:16px }",
-                    skin: theme === "dark" ? "oxide-dark" : "oxide",
-                    content_css: theme === "dark" ? "dark" : "light",
-                  }}
-                />
-              </FormControl>
-              <FormDescription className="text-light italic text-primary/70 text-xs">
-                Introduce your problem and expand on what you put in the title. Minimum 20
-                characters.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* Tags */}
-        <FormField
-          control={form.control}
-          name="tags"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Tags <span className="text-red-500">*</span>
-              </FormLabel>
-              <FormControl>
-                <>
-                  <Input
-                    disabled={type === "edit"}
-                    placeholder="Add Tags.."
-                    onKeyDown={(e) => handleInputKeyDown(e, field)}
+    <>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(submitHandler)}
+          className="flex flex-col w-full space-y-6"
+        >
+          {/* Title */}
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Question title <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormDescription className="text-light italic text-primary/70 text-xs">
+                  Be specific and imagine you are asking a question to another person
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* Explaination */}
+          <FormField
+            control={form.control}
+            name="explanation"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Detailed explaination of your problem <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Editor
+                    apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
+                    onInit={(evt, editor) => {
+                      // @ts-ignore
+                      editorRef.current = editor;
+                    }}
+                    onBlur={field.onBlur}
+                    onEditorChange={(content) => field.onChange(content)}
+                    initialValue={parsedQuestionDetails?.content || ""}
+                    init={{
+                      height: 350,
+                      menubar: false,
+                      plugins: [
+                        "advlist",
+                        "autolink",
+                        "lists",
+                        "link",
+                        "image",
+                        "charmap",
+                        "print",
+                        "preview",
+                        "anchor",
+                        "searchreplace",
+                        "visualblocks",
+                        "codesample",
+                        "fullscreen",
+                        "insertdatetime",
+                        "media",
+                        "table",
+                      ],
+                      toolbar:
+                        "undo redo | " +
+                        "codesample bold italic forecolor | alignleft aligncenter " +
+                        "alignright alignjustify | bullist numlist ",
+                      content_style: "body { font-family:Inter,Arial,sans-serif; font-size:16px }",
+                      skin: theme === "dark" ? "oxide-dark" : "oxide",
+                      content_css: theme === "dark" ? "dark" : "light",
+                    }}
                   />
-                  {type === "edit" && (
-                    <p className="text-xs text-red-600">Tags cannot be edited *</p>
-                  )}
-                  {field.value.length > 0 ? (
-                    <div className="flex flex-start gap-3 pt-2 flex-wrap w-full">
-                      {field.value.map((tag: any) => {
-                        return (
-                          <Badge
-                            key={tag}
-                            variant={type === "create" ? "default" : "secondary"}
-                            className="cursor-pointer"
-                          >
-                            {tag}
-                            {type !== "edit" && (
-                              <Image
-                                src="/icons/close.svg"
-                                alt="removetag"
-                                height={13}
-                                width={13}
-                                onClick={() => handleTagRemove(tag, field)}
-                              />
-                            )}
-                          </Badge>
-                        );
-                      })}
-                    </div>
-                  ) : null}
-                </>
-              </FormControl>
-              <FormDescription className="text-light italic text-primary/70 text-xs">
-                Add upto 3 tags to describe what your question is about. Press enter to add a tag.{" "}
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* Making the btn dynamic for editing and posting new Question */}
-        <Button type="submit" disabled={isSubmitting} className="max-w-[150px] w-full">
-          {isSubmitting ? (
-            <>{type === "edit" ? "Editing..." : "Posting..."}</>
-          ) : (
-            <>{type === "edit" ? "Edit Post" : "Submit Question"}</>
-          )}
-        </Button>
-      </form>
-    </Form>
+                </FormControl>
+                <FormDescription className="text-light italic text-primary/70 text-xs">
+                  Introduce your problem and expand on what you put in the title. Minimum 20
+                  characters.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* Tags */}
+          <FormField
+            control={form.control}
+            name="tags"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Tags <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <>
+                    <Input
+                      disabled={type === "edit"}
+                      placeholder="Add Tags.."
+                      onKeyDown={(e) => handleInputKeyDown(e, field)}
+                    />
+                    {type === "edit" && (
+                      <p className="text-xs text-red-600">Tags cannot be edited *</p>
+                    )}
+                    {field.value.length > 0 ? (
+                      <div className="flex flex-start gap-3 pt-2 flex-wrap w-full">
+                        {field.value.map((tag: any) => {
+                          return (
+                            <Badge
+                              key={tag}
+                              variant={type === "create" ? "default" : "secondary"}
+                              className="cursor-pointer"
+                            >
+                              {tag}
+                              {type !== "edit" && (
+                                <Image
+                                  src="/icons/close.svg"
+                                  alt="removetag"
+                                  height={13}
+                                  width={13}
+                                  onClick={() => handleTagRemove(tag, field)}
+                                />
+                              )}
+                            </Badge>
+                          );
+                        })}
+                      </div>
+                    ) : null}
+                  </>
+                </FormControl>
+                <FormDescription className="text-light italic text-primary/70 text-xs">
+                  Add upto 3 tags to describe what your question is about. Press enter to add a tag.{" "}
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* Making the btn dynamic for editing and posting new Question */}
+          <Button type="submit" disabled={isSubmitting} className="max-w-[150px] w-full">
+            {isSubmitting ? (
+              <>{type === "edit" ? "Editing..." : "Posting..."}</>
+            ) : (
+              <>{type === "edit" ? "Edit Post" : "Submit Question"}</>
+            )}
+          </Button>
+        </form>
+      </Form>
+    </>
   );
 };
 

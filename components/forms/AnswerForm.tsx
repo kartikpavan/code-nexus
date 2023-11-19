@@ -63,10 +63,6 @@ const AnswerForm = ({ authorId, questionId, question }: Props) => {
         <h3 className="text-sm font-semibold">
           Write your Answer here <span className="text-red-500">*</span>
         </h3>
-        <Button variant="secondary" className="flex gap-3 text-primary" onClick={() => {}}>
-          <Image src="/icons/magic.svg" alt="magic" width={20} height={20} />
-          Generate an AI Answer
-        </Button>
       </div>
       <Form {...form}>
         <form

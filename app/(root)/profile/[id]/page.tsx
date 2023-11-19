@@ -9,6 +9,7 @@ import { formatDateToCustomFormat } from "@/lib/utils";
 import { SignedIn, auth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import ProfileLoading from "./loading";
 
 const UserProfileDetailPage = async ({
   params,
@@ -19,6 +20,10 @@ const UserProfileDetailPage = async ({
 }) => {
   const { userId: clerkId } = auth();
   const userInfo = await getUserInformation({ userId: params.id });
+
+  const a = true;
+  if (a) return <ProfileLoading />;
+
   return (
     <>
       <div className="flex flex-col-reverse items-start justify-between sm:flex-row">
