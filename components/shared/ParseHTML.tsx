@@ -30,11 +30,11 @@ import "prismjs/plugins/line-numbers/prism-line-numbers.js";
 import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 
 const ParseHTML = ({ data }: { data: string }) => {
-   useEffect(() => {
-      Prism.highlightAll();
-   }, []);
+  useEffect(() => {
+    Prism.highlightAll();
+  }, []);
 
-   return <div>{parse(data)}</div>;
+  return <div className="w-full min-w-full markdown">{parse(data)}</div>;
 };
 
 export default ParseHTML;
