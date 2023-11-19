@@ -34,7 +34,7 @@ const ParseHTML = ({ data }: { data: string }) => {
     Prism.highlightAll();
   }, []);
 
-  return <div className="w-full min-w-full markdown">{parse(data)}</div>;
+  return <div className="w-full min-w-full markdown max-w-full">{parse(data)}</div>;
 };
 
 export default ParseHTML;

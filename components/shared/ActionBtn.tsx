@@ -4,6 +4,18 @@ import { deleteQuestion } from "@/lib/actions/question.action";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 interface Props {
   type: "question" | "answer";
   itemId: string;
@@ -38,14 +50,33 @@ const ActionBtn = ({ type, itemId }: Props) => {
           onClick={handleEdit}
         />
       )}
-      <Image
-        src={"/icons/delete.svg"}
-        alt="delete"
-        width={17}
-        height={17}
-        className="cursor-pointer object-contain"
-        onClick={handleDelete}
-      />
+
+      <AlertDialog>
+        <AlertDialogTrigger>
+          <Image
+            src={"/icons/delete.svg"}
+            alt="delete"
+            width={17}
+            height={17}
+            className="cursor-pointer object-contain"
+          />
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your Question and remove
+              data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction className="bg-red-500 text-white" onClick={handleDelete}>
+              DELETE
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

@@ -1,9 +1,9 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { GeistSans, GeistMono } from "geist/font";
-import "./globals.css";
-import "../styles/prism.css";
 import "../styles/theme.css";
+import "../styles/prism.css";
+import "./globals.css";
 
 import { ThemeProvider } from "@/context/ThemeProvider";
 
