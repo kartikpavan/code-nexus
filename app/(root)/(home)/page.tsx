@@ -11,6 +11,13 @@ import Link from "next/link";
 import { Suspense } from "react";
 import HomePageLoading from "./loading";
 
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "HOME | Code-Nexus",
+  description:
+    "Code Nexus is a community-driven Q&A platform dedicated to empowering developers, programmers, and tech enthusiasts.",
+};
+
 export default async function Home({
   searchParams,
 }: {

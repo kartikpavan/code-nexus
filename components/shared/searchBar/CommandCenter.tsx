@@ -6,13 +6,7 @@ import { useEffect, useState } from "react";
 import { IoReload } from "react-icons/io5";
 import SearchFilters from "./SearchFilters";
 import { globalSearch } from "@/lib/actions/global.action";
-
-const dummyData = [
-  { type: "question", id: "1", title: "NextJs Question" },
-  { type: "question", id: "2", title: "React-Router-DOM Question" },
-  { type: "tag", id: "3", title: "PHP" },
-  { type: "user", id: "3", title: "temba" },
-];
+import parse from "html-react-parser";
 
 const CommandCenter = () => {
   const searchParams = useSearchParams();
@@ -94,7 +88,7 @@ const CommandCenter = () => {
                       className="object-contain"
                     />
                     <div className="flex flex-col">
-                      <p className="line-clamp-1">{item.title}</p>
+                      <p className="line-clamp-1">{parse(item.title)}</p>
                       <p className="text-sm text-gray-500 font-semibold">{item.type}</p>
                     </div>
                   </Link>
