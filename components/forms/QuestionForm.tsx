@@ -246,7 +246,7 @@ const QuestionForm = ({ currentUserID, type, questionDetails }: Props) => {
                           return (
                             <Badge
                               key={tag}
-                              variant={type === "create" ? "default" : "secondary"}
+                              variant={type === "create" ? "outline" : "secondary"}
                               className="cursor-pointer"
                             >
                               {tag}
