@@ -37,7 +37,11 @@ export async function getAllTags(params: GetAllTagsParams) {
         break;
     }
 
-    const tags = await Tag.find(query).skip(skip).limit(pageSize).sort(sortOptions);
+    const tags = await Tag.find(query)
+      .skip(skip)
+      .limit(pageSize)
+      .sort(sortOptions)
+      .populate("questions");
     const totalTags = await Tag.countDocuments(query);
     const isNext = totalTags > skip + tags.length;
     return { tags, isNext };
