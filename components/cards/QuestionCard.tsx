@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDateTime } from "@/lib/utils";
 import Link from "next/link";
 import Metric from "../shared/Metric";
@@ -47,16 +41,14 @@ const QuestionCard = ({
     <Card>
       <CardHeader>
         <Link href={`/question/${_id}`}>
-          <CardTitle className="text-lg sm:text-xl line-clamp-2">
-            {title}
-          </CardTitle>
+          <CardTitle className="text-lg sm:text-xl line-clamp-2">{title}</CardTitle>
         </Link>
         <CardDescription className="flex flex-wrap gap-3">
           {tags.map((tag) => {
             return (
               <Link
                 key={tag._id}
-                href={`/tags/${_id}`}
+                href={`/tags/${tag._id}`}
                 className="border px-2 py-1 rounded-full text-xs font-medium text-primary hover:bg-white hover:border hover:border-primary"
               >
                 {tag.name}
@@ -66,9 +58,7 @@ const QuestionCard = ({
         </CardDescription>
         {/*  edit and delete btn  */}
         <SignedIn>
-          {showActionButtons && (
-            <ActionBtn type="question" itemId={JSON.stringify(_id)} />
-          )}
+          {showActionButtons && <ActionBtn type="question" itemId={JSON.stringify(_id)} />}
         </SignedIn>
       </CardHeader>
       <CardFooter className="w-full flex items-start justify-between flex-col-reverse sm:flex-row gap-4">

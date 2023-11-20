@@ -5,9 +5,10 @@ interface Props {
   _id: number | string;
   name: string;
   totalQuestions?: number;
+  isDisabled?: boolean;
 }
 
-const RenderTag = ({ _id, name, totalQuestions }: Props) => {
+const RenderTag = ({ _id, name, totalQuestions, isDisabled }: Props) => {
   return (
     <Link href={`/tags/${_id}`} className="flex items-center justify-between">
       <Badge
