@@ -83,6 +83,8 @@ const AnswerForm = ({ authorId, questionId, question }: Props) => {
                     }}
                     onBlur={field.onBlur}
                     onEditorChange={(content) => field.onChange(content)}
+                    initialValue={!authorId ? "You must be logged in to answer this question" : ""}
+                    disabled={!authorId}
                     init={{
                       height: 350,
                       menubar: false,
@@ -119,8 +121,8 @@ const AnswerForm = ({ authorId, questionId, question }: Props) => {
             )}
           />
           <div className="flex justify-end">
-            <Button disabled={isSubmitting} type="submit">
-              {isSubmitting ? "Posting" : "Submit"}
+            <Button disabled={isSubmitting || !authorId} type="submit">
+              {!authorId ? "Please Login To Answer" : isSubmitting ? "Posting" : "Submit"}
             </Button>
           </div>
         </form>

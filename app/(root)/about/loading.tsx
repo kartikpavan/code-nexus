@@ -28,13 +28,6 @@ const AboutPageLoading = () => {
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-full" />
       </div>
-
-      <p className="text-sm mt-5">
-        I'm always open to collaboration, feedback, and connecting with fellow enthusiasts. Feel
-        free to reach out via email or connect with me on social media.
-      </p>
-
-      <p className="text-sm mt-4">Thank you for being part of this journey. Happy coding! 👩‍💻🚀👨‍💻</p>
     </>
   );
 };

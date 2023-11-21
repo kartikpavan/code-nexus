@@ -57,12 +57,10 @@ export async function deleteUser(clerkId: DeleteUserParams) {
     connectToDb();
     const user = await User.findOneAndDelete({ clerkId: clerkId });
     if (!user) throw new Error("User not found hence cannot delete");
-    // Delete those questions posted by deleted user
+    // Delete questions posted by the deleted user
     await Question.deleteMany({ author: user._id });
-    // Get Qestion id's associated with the user
-    const questionId = await Question.find({ author: user._id }).distinct("_id");
-    // TODO: delete questions ,answers and comments etc
-
+    // Delete questions posted by the deleted user
+    await Question.deleteMany({ author: user._id });
     // Finally Delete the user
     const deletedUser = await User.findByIdAndDelete(user._id);
     return deletedUser;
